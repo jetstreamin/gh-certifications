@@ -431,6 +431,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   const ROWS = 20;
   const BLOCK = 34;
   const START_LIVES = 3;
+  const PRE_DROP_COUNTDOWN_MS = 10000;
   const BASE_DROP_MS = 1200;
   const LEVEL_STEP_MS = 70;
   const MIN_DROP_MS = 320;
@@ -447,6 +448,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
 
   const RULES = [
     'Each falling piece is tied to one GH-600 question with options A-D.',
+    'Each new piece has a 10-second countdown before gravity starts.',
     'You must choose A/B/C/D before the piece locks to avoid a no-answer penalty.',
     'Only a correct answer unlocks left/right movement for that piece.',
     'Wrong answer: immediate life loss and movement lock for the current piece.',
@@ -472,6 +474,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   const CONTROLS = [
     'Start / Pause / Restart buttons',
     'Answer: keys 1-4 (top row or numpad) or click answer options',
+    '10-second pre-drop countdown on every new piece',
     'Move piece: Left / Right arrows or A / D (only if current answer is correct)',
     'Soft drop: Down arrow or S',
     'Rotate: Up arrow or W (only if current answer is correct)',
@@ -546,6 +549,8 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   let gameRunning = false;
   let paused = false;
   let gameOver = false;
+  let preDropCountdownUntil = 0;
+  let preDropReadyAnnounced = false;
 
   let score = 0;
   let lines = 0;
@@ -831,6 +836,9 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       endGame();
       return;
     }
+    preDropCountdownUntil = performance.now() + PRE_DROP_COUNTDOWN_MS;
+    preDropReadyAnnounced = false;
+    dropTimer = 0;
     renderQuestion(currentPiece.question);
     highlightZone(-1);
     if (autoRead) readCurrentQuestion();
@@ -873,6 +881,21 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     }
     const delta = timestamp - lastTime;
     lastTime = timestamp;
+
+    const remainingCountdown = Math.max(0, preDropCountdownUntil - timestamp);
+    if (remainingCountdown > 0) {
+      dropTimer = 0;
+      status.textContent = `Next drop in ${(remainingCountdown / 1000).toFixed(1)}s.`;
+      draw();
+      requestAnimationFrame(tick);
+      return;
+    }
+
+    if (!preDropReadyAnnounced) {
+      preDropReadyAnnounced = true;
+      status.textContent = 'Drop live. Guide the piece.';
+    }
+
     dropTimer += delta;
 
     if (dropTimer >= dropIntervalMs()) {
@@ -1113,6 +1136,14 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       const idx = Number(key) - 1;
       answerQuestion(idx);
       highlightZone(idx);
+      return;
+    }
+
+    const remainingCountdown = Math.max(0, preDropCountdownUntil - performance.now());
+    if (remainingCountdown > 0) {
+      if (key === 'ArrowLeft' || key === 'ArrowRight' || key === 'ArrowUp' || key === 'ArrowDown') {
+        status.textContent = `Drop starts in ${(remainingCountdown / 1000).toFixed(1)}s.`;
+      }
       return;
     }
 
