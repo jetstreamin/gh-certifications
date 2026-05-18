@@ -449,6 +449,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   const RULES = [
     'Each falling piece is tied to one GH-600 question with options A-D.',
     'Each new piece has a 10-second countdown before gravity starts.',
+    'Submitting any answer immediately ends the countdown and starts the drop.',
     'You must choose A/B/C/D before the piece locks to avoid a no-answer penalty.',
     'Only a correct answer unlocks left/right movement for that piece.',
     'Wrong answer: immediate life loss and movement lock for the current piece.',
@@ -475,6 +476,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     'Start / Pause / Restart buttons',
     'Answer: keys 1-4 (top row or numpad) or click answer options',
     '10-second pre-drop countdown on every new piece',
+    'Any answer choice skips countdown and starts drop immediately',
     'Move piece: Left / Right arrows or A / D (only if current answer is correct)',
     'Soft drop: Down arrow or S',
     'Rotate: Up arrow or W (only if current answer is correct)',
@@ -761,8 +763,17 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     return currentPiece.x + Math.floor(currentPiece.shape[0].length / 2);
   }
 
+  function releasePreDropCountdown() {
+    if (preDropCountdownUntil > performance.now()) {
+      preDropCountdownUntil = 0;
+      preDropReadyAnnounced = false;
+      dropTimer = dropIntervalMs();
+    }
+  }
+
   function answerQuestion(choice) {
     if (!currentPiece || currentPiece.answered || gameOver || !gameRunning) return;
+    releasePreDropCountdown();
     currentPiece.answered = true;
     currentPiece.selected = choice;
     answeredCount += 1;
