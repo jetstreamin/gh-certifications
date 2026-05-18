@@ -14,7 +14,7 @@ Welcome to the GitHub Certifications learning repository. This resource document
   - Orchestrate multi-agent coordination
   - Implement guardrails and accountability
 
-### Copilot Custom Agents Administration
+### Copilot Custom Agents Administration & SDK
 
 - **[Custom Agents Admin Guide](./custom-agents-admin-guide.md)** — Complete guide for organization owners setting up and managing custom Copilot agents. Covers repository setup, agent lifecycle, compliance, and governance.
   - Organization setup and prerequisites
@@ -22,6 +22,14 @@ Welcome to the GitHub Certifications learning repository. This resource document
   - Compliance and security requirements
   - Tools management and permissions
   - Monitoring and metrics
+
+- **[Copilot SDK: Custom Agents Implementation](./copilot-sdk-custom-agents.md)** — Developer guide for building custom agents with the Copilot SDK. Covers configuration, sub-agent orchestration, event handling, and production patterns.
+  - Agent configuration and properties
+  - Sub-agent delegation and inference
+  - Event handling and monitoring
+  - Tool scoping and security
+  - MCP server integration
+  - Best practices and troubleshooting
 
 ### CodeQL & Code Security
 

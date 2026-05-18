@@ -7,8 +7,9 @@ A comprehensive learning hub for GitHub security and advanced topics certificati
 **Exam Certifications:**
 - **[GH-600: Developing in Agentic AI Systems](docs/gh-600-exam-guide.md)** — Complete study guide for the Microsoft Certified: GitHub Agentic AI Developer exam. Covers all 6 skill areas with practical patterns and implementation examples.
 
-**Agent Administration:**
+**Agent Administration & SDK:**
 - **[Custom Agents Administration Guide](docs/custom-agents-admin-guide.md)** — Setup and governance for organization-level custom Copilot agents. Repository structure, compliance, security, and lifecycle management.
+- **[Copilot SDK: Custom Agents Implementation](docs/copilot-sdk-custom-agents.md)** — Developer guide for building custom agents with the Copilot SDK. Configuration, event handling, tool scoping, and production patterns.
 
 **Security & Code Analysis:**
 - **[CodeQL Database Preparation](docs/codeql/01-database-preparation.md)** — Complete guide to installing CodeQL CLI, creating databases, and understanding extractors.
