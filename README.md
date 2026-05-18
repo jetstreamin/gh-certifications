@@ -9,6 +9,7 @@ A comprehensive learning hub for GitHub security and advanced topics certificati
 - **[GH-600: Developing in Agentic AI Systems](docs/gh-600-exam-guide.md)** — Complete study guide for the Microsoft Certified: GitHub Agentic AI Developer exam. Covers all 6 skill areas with practical patterns and implementation examples.
 - **[GH-600 Hard Practice Tests](docs/gh-600-practice-tests.md)** — Two difficult practice tests with answer keys, scoring guidance, and a fast-pass checklist.
 - **[GH-600 Native Mock Exam](docs/gh-600-native-mock-exam.html)** — Native browser mock exam with 60 timed questions, automatic scoring, study mode, flash cards, keyboard shortcuts, read-aloud mode, and correct-answer reveal.
+- **[GH-600 Training Game](docs/gh-600-training-game.html)** — Tetris-style training game with question-gated movement, falling pieces, and a persistent scoreboard.
 
 **Agent Administration, SDK, Memory & Tutorials:**
 
@@ -37,6 +38,7 @@ All guides are in the `docs/` folder. Start with:
 cat docs/gh-600-exam-guide.md
 cat docs/gh-600-practice-tests.md
 cat docs/gh-600-native-mock-exam.html
+cat docs/gh-600-training-game.html
 cat docs/copilot-sdk-custom-agents.md
 cat docs/custom-agent-implementation-planner.md
 ```
@@ -60,6 +62,7 @@ Visit: [GitHub Pages](https://jetstreamin.github.io/gh-certifications/)
 │   ├── gh-600-exam-guide.md               # GH-600 certification guide
 │   ├── gh-600-practice-tests.md           # GH-600 practice tests
 │   ├── gh-600-native-mock-exam.html       # GH-600 native timed mock exam
+│   ├── gh-600-training-game.html          # GH-600 tetris-style training game
 │   ├── custom-agents-admin-guide.md       # Organization administration
 │   ├── cloud-agent-guardrails.md          # Cloud agent guardrails tutorial
 │   ├── cloud-agent-risks-mitigations.md    # Cloud agent risks and mitigations
@@ -81,13 +84,13 @@ Visit: [GitHub Pages](https://jetstreamin.github.io/gh-certifications/)
 
 ## 📊 Coverage Summary
 
-- GH-600 Exam: 3 guides, ~13,000 lines, complete
+- GH-600 Exam: 4 guides, ~15,000 lines, complete
 - Custom Agents (Admin): 1 guide, ~4,000 lines, complete
 - Copilot SDK: 1 guide, ~7,200 lines, complete
 - Copilot Memory: 1 guide, ~9,000 lines, complete
 - Custom Agent: Planner: 1 guide, ~5,000 lines, complete
 - CodeQL: 2 guides, ~2,700 lines, complete
-- Total: 13 guides, ~43,000 lines, complete
+- Total: 14 guides, ~45,000 lines, complete
 
 ## 🛠️ Development & Contribution
 
@@ -114,7 +117,7 @@ jekyll serve
 The site is automatically deployed to GitHub Pages whenever commits are pushed to `main`:
 
 - **Build Tool:** Jekyll
-- **Theme:** jekyll-theme-minimal
+- **Theme:** jekyll-theme-cayman
 - **Source:** `/docs` folder
 - **URL:** [jetstreamin.github.io/gh-certifications](https://jetstreamin.github.io/gh-certifications/)
 - **Workflow:** `.github/workflows/public-pages.yml`

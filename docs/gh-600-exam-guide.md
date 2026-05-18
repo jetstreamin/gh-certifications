@@ -1151,6 +1151,7 @@ Use the dedicated hard-mode practice tests to pressure-test your readiness befor
 
 - [GH-600 Hard Practice Tests](./gh-600-practice-tests.md) - Two difficult practice exams with answer keys, scoring guidance, and a fast-pass checklist.
 - [GH-600 Native Mock Exam](./gh-600-native-mock-exam.html) - Native browser exam mode with 60 timed questions, automatic scoring, study mode, flash cards, keyboard shortcuts, read-aloud mode, and answer reveal with explanations.
+- [GH-600 Training Game](./gh-600-training-game.html) - Tetris-style quiz game: answer correctly to unlock piece control, route drops into the right zone, and climb the scoreboard.
 
 ---
 

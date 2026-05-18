@@ -31,6 +31,12 @@ The landing page is now organized by outcome: pass GH-600, build safe custom age
   - Auto scoring and answer reveal
   - Study mode, flash cards, keyboard shortcuts, read-aloud mode
 
+- **[GH-600 Training Game](./gh-600-training-game.html)**
+  - Tetris-style falling-piece training loop
+  - Correct answers unlock movement control
+  - Rules, features, and persistent local scoreboard
+  - Dark/light mode and read-aloud support
+
 ---
 
 ## Custom Agent Path
@@ -70,8 +76,8 @@ The landing page is now organized by outcome: pass GH-600, build safe custom age
 
 ## Coverage Snapshot
 
-- GH-600: GitHub Agentic AI Developer - Complete (3 guides)
-- GitHub Agent Development - Complete (7 guides)
+- GH-600: GitHub Agentic AI Developer - Complete (4 guides)
+- GitHub Agent Development - Complete (8 guides)
 - GitHub Security and Code Scanning - In progress (2 guides)
 
 ---
@@ -79,5 +85,5 @@ The landing page is now organized by outcome: pass GH-600, build safe custom age
 ## Repository Totals
 
 - Last updated: May 18, 2026
-- Total guides: 12
-- Total content: 43,000+ lines
+- Total guides: 13
+- Total content: 45,000+ lines
