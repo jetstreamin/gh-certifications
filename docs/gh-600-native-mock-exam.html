@@ -20,6 +20,21 @@ description: A native 60-question GH-600 mock exam with timed mode, scoring, ans
     --shadow: 0 18px 50px rgba(20, 32, 43, 0.14);
   }
 
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0d151f;
+    --bg-2: #0a1018;
+    --panel: #13202d;
+    --ink: #e8f0f6;
+    --muted: #9db0bf;
+    --accent: #4fb0be;
+    --accent-2: #f6a85e;
+    --good: #64d59d;
+    --bad: #ff7d9a;
+    --border: rgba(232, 240, 246, 0.18);
+    --shadow: 0 20px 56px rgba(0, 0, 0, 0.45);
+  }
+
   body {
     margin: 0;
     font-family: Aptos, "Segoe UI", sans-serif;
@@ -529,6 +544,7 @@ description: A native 60-question GH-600 mock exam with timed mode, scoring, ans
     <button class="mode-btn active" id="examModeBtn">Exam Mode</button>
     <button class="mode-btn" id="studyModeBtn">Study Mode</button>
     <button class="mode-btn" id="flashModeBtn">Flash Cards</button>
+    <button class="mode-btn" id="themeToggleBtn">Theme: Light</button>
     <button class="mode-btn" id="readAloudToggleBtn">Read Aloud: Off</button>
     <span class="muted tiny">All modes run fully client-side for GitHub Pages compatibility.</span>
   </section>
@@ -694,6 +710,7 @@ description: A native 60-question GH-600 mock exam with timed mode, scoring, ans
 
   const PASS_SCORE = 51;
   const STORAGE_KEY = 'gh600-native-mock-exam-v1';
+  const THEME_KEY = 'gh600-native-theme-v1';
   const skillOrder = ['Planning', 'Tools', 'Memory', 'Evaluation', 'Coordination', 'Guardrails'];
 
   const questionContainer = document.getElementById('questions');
@@ -736,6 +753,7 @@ description: A native 60-question GH-600 mock exam with timed mode, scoring, ans
   const flashFlipBtn = document.getElementById('flashFlipBtn');
   const flashNextBtn = document.getElementById('flashNextBtn');
   const flashShuffleBtn = document.getElementById('flashShuffleBtn');
+  const themeToggleBtn = document.getElementById('themeToggleBtn');
   const readAloudToggleBtn = document.getElementById('readAloudToggleBtn');
   const studyReadBtn = document.getElementById('studyReadBtn');
   const studyStopReadBtn = document.getElementById('studyStopReadBtn');
@@ -754,7 +772,26 @@ description: A native 60-question GH-600 mock exam with timed mode, scoring, ans
   let flashPosition = 0;
   let flashFlipped = false;
   let readAloudEnabled = false;
+  let currentTheme = 'light';
   const canSpeak = typeof window !== 'undefined' && 'speechSynthesis' in window;
+
+  function applyTheme(theme) {
+    currentTheme = theme === 'dark' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    themeToggleBtn.textContent = currentTheme === 'dark' ? 'Theme: Dark' : 'Theme: Light';
+    themeToggleBtn.classList.toggle('active', currentTheme === 'dark');
+    localStorage.setItem(THEME_KEY, currentTheme);
+  }
+
+  function loadTheme() {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === 'dark' || saved === 'light') {
+      applyTheme(saved);
+      return;
+    }
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark ? 'dark' : 'light');
+  }
 
   function formatTime(totalSeconds) {
     const mins = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
@@ -1123,6 +1160,9 @@ description: A native 60-question GH-600 mock exam with timed mode, scoring, ans
     renderFlashCard();
   });
   flashShuffleBtn.addEventListener('click', () => shuffleFlashDeck());
+  themeToggleBtn.addEventListener('click', () => {
+    applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+  });
   readAloudToggleBtn.addEventListener('click', () => {
     if (!canSpeak) return;
     readAloudEnabled = !readAloudEnabled;
@@ -1182,6 +1222,7 @@ description: A native 60-question GH-600 mock exam with timed mode, scoring, ans
     }
   });
 
+  loadTheme();
   loadState();
   renderQuestions();
   updateProgress();
