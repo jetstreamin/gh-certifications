@@ -6,114 +6,78 @@ description: Comprehensive learning hub for GitHub Certifications including GH-6
 
 ## GitHub Certifications Learning Hub
 
-Welcome to the GitHub Certifications learning repository. This resource documents key concepts, best practices, and step-by-step guides for GitHub's security and advanced topics certifications.
+The landing page is now organized by outcome: pass GH-600, build safe custom agents, and run CodeQL effectively.
 
-## 📚 Available Guides
+## Start Here
 
-### GH-600: Developing in Agentic AI Systems
-
-- **[GH-600 Exam Study Guide](./gh-600-exam-guide.md)** — Comprehensive guide to the Microsoft Certified: GitHub Agentic AI Developer exam. Covers all 6 skill areas with practical examples, best practices, and implementation patterns.
-  - Prepare agent architecture and SDLC processes
-  - Implement tool use and environment interaction
-  - Manage memory, state, and execution
-  - Perform evaluation, error analysis, and tuning
-  - Orchestrate multi-agent coordination
-  - Implement guardrails and accountability
-
-- **[GH-600 Hard Practice Tests](./gh-600-practice-tests.md)** — Two difficult practice tests with answer keys and a fast-pass checklist.
-  - Hard-mode scenario questions
-  - Detailed answer explanations
-  - Score bands and review targets
-  - Exam-ready fast-pass checklist
-
-- **[GH-600 Native Mock Exam](./gh-600-native-mock-exam.html)** — Native browser mock exam with timer, scoring, study mode, flash cards, keyboard shortcuts, read-aloud mode, answer reveal, and skill breakdown.
-  - 60-question timed run
-  - Automatic pass/fail scoring
-  - Study mode with instant feedback
-  - Flash cards with shuffle and flip
-  - Keyboard-first controls
-  - Read-aloud support (browser speech)
-  - Correct-answer reveal with rationale
-  - Per-skill performance breakdown
-
-### Copilot Custom Agents: Administration, SDK, Memory & Tutorials
-
-- **[Custom Agents Admin Guide](./custom-agents-admin-guide.md)** — Complete guide for organization owners setting up and managing custom Copilot agents. Covers repository setup, agent lifecycle, compliance, and governance.
-  - Organization setup and prerequisites
-  - Agent creation and approval workflows
-  - Compliance and security requirements
-  - Tools management and permissions
-  - Monitoring and metrics
-
-- **[Cloud Agent Guardrails](./cloud-agent-guardrails.md)** — Tutorial for setting up policy, ruleset, and Actions guardrails for GitHub Copilot cloud agent.
-  - Enterprise and organization policy planning
-  - Ruleset and CODEOWNERS protections
-  - GitHub Actions secrets, runners, and permissions
-  - Workflow approval behavior
-  - Readiness checklist
-
-- **[Cloud Agent Risks and Mitigations](./cloud-agent-risks-mitigations.md)** — Practical summary of cloud-agent risks and built-in mitigations.
-  - Unvalidated code and vulnerability controls
-  - Repository write and branch protections
-  - Sensitive data and prompt-injection defenses
-  - Auditability and traceability
-  - Quick mitigation checklist
-
-- **[Copilot SDK: Custom Agents Implementation](./copilot-sdk-custom-agents.md)** — Developer guide for building custom agents with the Copilot SDK. Covers configuration, sub-agent orchestration, event handling, and production patterns.
-  - Agent configuration and properties
-  - Sub-agent delegation and inference
-  - Event handling and monitoring
-  - Tool scoping and security
-  - MCP server integration
-  - Best practices and troubleshooting
-
-- **[Copilot Memory: Repository Facts & User Preferences](./copilot-memory.md)** — Learn how Copilot stores repository-level facts and user preferences, improving effectiveness over time. Covers storage, validation, retention, and organizational best practices.
-  - Repository-level facts vs. user-level preferences
-  - Storage, validation, and auto-deletion (28-day rule)
-  - Privacy and security considerations
-  - Where Memory is used (Cloud Agent, Code Review, CLI)
-  - Enabling, managing, and curating facts
-  - Best practices for developers and organizations
-
-- **[Custom Agent: Implementation Planner](./custom-agent-implementation-planner.md)** — Tutorial for creating and using a custom agent that specializes in breaking down features into actionable tasks and creating detailed implementation plans.
-  - Agent setup and configuration
-  - Using the agent for feature planning
-  - Plan structure and best practices
-  - Variations for different team sizes
-  - Integration patterns and examples
-
-### CodeQL & Code Security
-
-- **[Prepare a Database for CodeQL](./codeql/01-database-preparation.md)** — Learn how to install the CodeQL CLI, set up databases, and understand extractors for code analysis.
-- **[Run CodeQL in a Database](./codeql/02-run-queries.md)** — Run queries, analyze results in SARIF format, upload findings to GitHub, and integrate with CI/CD workflows
+1. **Preparing for GH-600?** Start with [GH-600 Exam Study Guide](./gh-600-exam-guide.md), then use [GH-600 Native Mock Exam](./gh-600-native-mock-exam.html).
+2. **Implementing custom agents?** Use [Custom Agents Admin Guide](./custom-agents-admin-guide.md) and [Copilot SDK: Custom Agents Implementation](./copilot-sdk-custom-agents.md).
+3. **Running code security analysis?** Use [Prepare a Database for CodeQL](./codeql/01-database-preparation.md), then [Run CodeQL in a Database](./codeql/02-run-queries.md).
 
 ---
 
-## 🎯 Certification Paths
+## GH-600 Path
 
-- **GH-600: GitHub Agentic AI Developer** — Complete (3 guides)
-- **GitHub Agent Development** — Complete (7 guides)
-- **GitHub Security & Code Scanning** — In progress
-- Additional paths coming soon...
+- **[GH-600 Exam Study Guide](./gh-600-exam-guide.md)**
+  - Full six-domain coverage
+  - Practical exam strategy and patterns
 
----
+- **[GH-600 Hard Practice Tests](./gh-600-practice-tests.md)**
+  - Hard scenario sets
+  - Answer keys and rationale
 
-## 🚀 Getting Started
-
-1. Navigate to the relevant guide above
-2. Follow the step-by-step instructions
-3. Practice with your own codebase
-4. Refer back to quick reference sections as needed
-
----
-
-## 📖 How to Use This Repository
-
-- **Quick Reference**: Use the Quick Reference sections at the top of each guide for common commands
-- **Detailed Steps**: Follow the Detailed sections for hands-on implementation
-- **Verification**: Use the Verification Checklists to confirm successful setup
-- **Troubleshooting**: Check Common Issues & Solutions for help with problems
+- **[GH-600 Native Mock Exam](./gh-600-native-mock-exam.html)**
+  - 60-question timed exam mode
+  - Auto scoring and answer reveal
+  - Study mode, flash cards, keyboard shortcuts, read-aloud mode
 
 ---
 
-**Last Updated:** May 18, 2026 | **Total Guides:** 11 | **Total Content:** 40,000+ lines
+## Custom Agent Path
+
+- **[Custom Agents Admin Guide](./custom-agents-admin-guide.md)**
+  - Org-level setup and governance
+  - Approval, compliance, lifecycle controls
+
+- **[Cloud Agent Guardrails](./cloud-agent-guardrails.md)**
+  - Rulesets, policies, Actions permissions
+  - Deployment-time safety controls
+
+- **[Cloud Agent Risks and Mitigations](./cloud-agent-risks-mitigations.md)**
+  - Risk catalog and mitigations
+  - Operational controls and checklists
+
+- **[Copilot SDK: Custom Agents Implementation](./copilot-sdk-custom-agents.md)**
+  - Agent configuration and delegation
+  - Tool scoping and event handling
+
+- **[Copilot Memory: Repository Facts & User Preferences](./copilot-memory.md)**
+  - Memory model, retention, governance
+  - Practical usage patterns
+
+- **[Custom Agent: Implementation Planner](./custom-agent-implementation-planner.md)**
+  - End-to-end planner agent tutorial
+  - Team workflow integration patterns
+
+---
+
+## Code Security Path
+
+- **[Prepare a Database for CodeQL](./codeql/01-database-preparation.md)**
+- **[Run CodeQL in a Database](./codeql/02-run-queries.md)**
+
+---
+
+## Coverage Snapshot
+
+- GH-600: GitHub Agentic AI Developer - Complete (3 guides)
+- GitHub Agent Development - Complete (7 guides)
+- GitHub Security and Code Scanning - In progress (2 guides)
+
+---
+
+## Repository Totals
+
+- Last updated: May 18, 2026
+- Total guides: 12
+- Total content: 43,000+ lines

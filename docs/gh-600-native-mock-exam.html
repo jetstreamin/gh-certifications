@@ -475,102 +475,35 @@ description: A native 60-question GH-600 mock exam with timed mode, scoring, ans
       position: static;
     }
   }
-    <section class="panel mode-switch">
-      <strong>Mode</strong>
-      <button class="mode-btn active" id="examModeBtn">Exam Mode</button>
-      <button class="mode-btn" id="studyModeBtn">Study Mode</button>
-      <button class="mode-btn" id="flashModeBtn">Flash Cards</button>
-      <button class="mode-btn" id="readAloudToggleBtn">Read Aloud: Off</button>
-      <span class="muted tiny">All modes run fully client-side for GitHub Pages compatibility.</span>
-    </section>
+</style>
 
-    <div id="examModeView">
-      <section class="panel progress-wrap">
-        <div class="progress-top">
-          <strong>Progress</strong>
-          <span class="muted" id="progressLabel">0 of 60 answered</span>
+<div class="exam-shell">
+  <section class="hero">
+    <div class="hero-card">
+      <div class="pill">GH-600 Native Mock Exam</div>
+      <h1>Timed, scored, and answer-revealed in the browser.</h1>
+      <p class="lede">
+        This drill uses 60 questions to give full exam-pressure coverage. Use Exam Mode for strict timing,
+        Study Mode for instant feedback, and Flash Cards for rapid retention.
+      </p>
+      <div class="meta-row">
+        <span class="pill">60 questions</span>
+        <span class="pill">60-minute timer</span>
         <span class="pill">Pass line: 51/60</span>
-        <div class="progress-bar"><div id="progressFill"></div></div>
-      </section>
-
-      <main class="layout">
-        <section class="questions" id="questions"></section>
-
-        <aside class="panel sticky side-panel">
-          <div class="summary">
-            <strong id="finalScore">Score: --</strong>
-            <div class="muted" id="passMessage">Submit the exam to score it and reveal the correct answers.</div>
-          </div>
-          <div>
-            <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Skill Breakdown</h2>
-            <div class="skill-breakdown" id="skillBreakdown"></div>
-          </div>
-          <div>
-            <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Answer Review</h2>
-            <div id="reviewSummary" class="tiny muted">No answers scored yet.</div>
-          </div>
-        </aside>
-      </main>
-
-      <section class="panel results hidden" id="resultsPanel">
-        <h2 style="margin-top: 0;">Detailed Review</h2>
-        <div id="reviewCards"></div>
-      </section>
+        <span class="pill">Client-side only (Pages compatible)</span>
+      </div>
     </div>
 
-    <div id="studyModeView" class="hidden">
-      <main class="study-grid">
-        <section class="panel study-card">
-          <div class="skill-tag" id="studySkill">Planning</div>
-          <h2 id="studyPrompt" style="margin: 0;"></h2>
-          <div class="study-options" id="studyOptions"></div>
-          <div id="studyFeedback" class="study-feedback tiny muted">Pick an answer to get instant feedback and rationale.</div>
-          <div class="study-controls">
-            <button class="secondary" id="studyPrevBtn">Previous</button>
-            <button class="secondary" id="studyNextBtn">Next</button>
-            <button class="secondary" id="studyRandomBtn">Random</button>
-            <button class="secondary" id="studyReadBtn">Read Question</button>
-            <button class="secondary" id="studyStopReadBtn">Stop Reading</button>
-          </div>
-          <p class="tiny muted">Shortcuts: <span class="kbd">1</span>-<span class="kbd">4</span> answer, <span class="kbd">&larr;</span>/<span class="kbd">&rarr;</span> navigate, <span class="kbd">R</span> random.</p>
-        </section>
-
-        <aside class="panel sticky side-panel">
-          <div class="summary">
-            <strong id="studyCounter">Question 1/60</strong>
-            <div class="muted" id="studyStatus">Study Mode gives immediate correct/incorrect feedback after each answer.</div>
-          </div>
-        </aside>
-      </main>
-    </div>
-
-    <div id="flashModeView" class="hidden">
-      <main class="study-grid">
-        <section class="panel study-card">
-          <article class="flash-card" id="flashCard">
-            <div class="flash-label" id="flashFaceLabel">Question</div>
-            <h2 id="flashFront"></h2>
-            <div id="flashBack" class="flash-answer hidden tiny"></div>
-          </article>
-          <div class="flash-controls">
-            <button class="secondary" id="flashPrevBtn">Previous</button>
-            <button class="primary" id="flashFlipBtn">Flip</button>
-            <button class="secondary" id="flashNextBtn">Next</button>
-            <button class="secondary" id="flashShuffleBtn">Shuffle Deck</button>
-            <button class="secondary" id="flashReadBtn">Read Card</button>
-            <button class="secondary" id="flashStopReadBtn">Stop Reading</button>
-          </div>
-          <p class="tiny muted">Shortcuts: <span class="kbd">Space</span> flip, <span class="kbd">&larr;</span>/<span class="kbd">&rarr;</span> navigate, <span class="kbd">S</span> shuffle.</p>
-        </section>
-
-        <aside class="panel sticky side-panel">
-          <div class="summary">
-            <strong id="flashCounter">Card 1/60</strong>
-            <div class="muted" id="flashSkill">Skill: Planning</div>
-          </div>
-        </aside>
-      </main>
-    </div>
+    <aside class="panel side-panel sticky">
+      <div class="stat-grid">
+        <div class="stat">
+          <span class="label">Time Remaining</span>
+          <div class="value" id="timer">60:00</div>
+        </div>
+        <div class="stat">
+          <span class="label">Answered</span>
+          <div class="value" id="answeredCount">0/60</div>
+        </div>
         <div class="stat">
           <span class="label">Score</span>
           <div class="value" id="scoreCount">--</div>
@@ -586,42 +519,107 @@ description: A native 60-question GH-600 mock exam with timed mode, scoring, ans
         <button class="danger" id="resetBtn">Reset</button>
       </div>
       <div class="notice tiny">
-        Tip: answer quickly, then review only the items you missed. That is the closest rehearsal to the real exam.
+        Tip: answer quickly, then review only missed items. That best simulates real exam pressure.
       </div>
     </aside>
   </section>
 
-  <section class="panel progress-wrap">
-    <div class="progress-top">
-      <strong>Progress</strong>
-      <span class="muted" id="progressLabel">0 of 60 answered</span>
-    </div>
-    <div class="progress-bar"><div id="progressFill"></div></div>
+  <section class="panel mode-switch">
+    <strong>Mode</strong>
+    <button class="mode-btn active" id="examModeBtn">Exam Mode</button>
+    <button class="mode-btn" id="studyModeBtn">Study Mode</button>
+    <button class="mode-btn" id="flashModeBtn">Flash Cards</button>
+    <button class="mode-btn" id="readAloudToggleBtn">Read Aloud: Off</button>
+    <span class="muted tiny">All modes run fully client-side for GitHub Pages compatibility.</span>
   </section>
 
-  <main class="layout">
-    <section class="questions" id="questions"></section>
+  <div id="examModeView">
+    <section class="panel progress-wrap">
+      <div class="progress-top">
+        <strong>Progress</strong>
+        <span class="muted" id="progressLabel">0 of 60 answered</span>
+      </div>
+      <div class="progress-bar"><div id="progressFill"></div></div>
+    </section>
 
-    <aside class="panel sticky side-panel">
-      <div class="summary">
-        <strong id="finalScore">Score: --</strong>
-        <div class="muted" id="passMessage">Submit the exam to score it and reveal the correct answers.</div>
-      </div>
-      <div>
-        <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Skill Breakdown</h2>
-        <div class="skill-breakdown" id="skillBreakdown"></div>
-      </div>
-      <div>
-        <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Answer Review</h2>
-        <div id="reviewSummary" class="tiny muted">No answers scored yet.</div>
-      </div>
-    </aside>
-  </main>
+    <main class="layout">
+      <section class="questions" id="questions"></section>
 
-  <section class="panel results hidden" id="resultsPanel">
-    <h2 style="margin-top: 0;">Detailed Review</h2>
-    <div id="reviewCards"></div>
-  </section>
+      <aside class="panel sticky side-panel">
+        <div class="summary">
+          <strong id="finalScore">Score: --</strong>
+          <div class="muted" id="passMessage">Submit the exam to score it and reveal the correct answers.</div>
+        </div>
+        <div>
+          <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Skill Breakdown</h2>
+          <div class="skill-breakdown" id="skillBreakdown"></div>
+        </div>
+        <div>
+          <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Answer Review</h2>
+          <div id="reviewSummary" class="tiny muted">No answers scored yet.</div>
+        </div>
+      </aside>
+    </main>
+
+    <section class="panel results hidden" id="resultsPanel">
+      <h2 style="margin-top: 0;">Detailed Review</h2>
+      <div id="reviewCards"></div>
+    </section>
+  </div>
+
+  <div id="studyModeView" class="hidden">
+    <main class="study-grid">
+      <section class="panel study-card">
+        <div class="skill-tag" id="studySkill">Planning</div>
+        <h2 id="studyPrompt" style="margin: 0;"></h2>
+        <div class="study-options" id="studyOptions"></div>
+        <div id="studyFeedback" class="study-feedback tiny muted">Pick an answer to get instant feedback and rationale.</div>
+        <div class="study-controls">
+          <button class="secondary" id="studyPrevBtn">Previous</button>
+          <button class="secondary" id="studyNextBtn">Next</button>
+          <button class="secondary" id="studyRandomBtn">Random</button>
+          <button class="secondary" id="studyReadBtn">Read Question</button>
+          <button class="secondary" id="studyStopReadBtn">Stop Reading</button>
+        </div>
+        <p class="tiny muted">Shortcuts: <span class="kbd">1</span>-<span class="kbd">4</span> answer, <span class="kbd">&larr;</span>/<span class="kbd">&rarr;</span> navigate, <span class="kbd">R</span> random.</p>
+      </section>
+
+      <aside class="panel sticky side-panel">
+        <div class="summary">
+          <strong id="studyCounter">Question 1/60</strong>
+          <div class="muted" id="studyStatus">Study Mode gives immediate correct/incorrect feedback after each answer.</div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <div id="flashModeView" class="hidden">
+    <main class="study-grid">
+      <section class="panel study-card">
+        <article class="flash-card" id="flashCard">
+          <div class="flash-label" id="flashFaceLabel">Question</div>
+          <h2 id="flashFront"></h2>
+          <div id="flashBack" class="flash-answer hidden tiny"></div>
+        </article>
+        <div class="flash-controls">
+          <button class="secondary" id="flashPrevBtn">Previous</button>
+          <button class="primary" id="flashFlipBtn">Flip</button>
+          <button class="secondary" id="flashNextBtn">Next</button>
+          <button class="secondary" id="flashShuffleBtn">Shuffle Deck</button>
+          <button class="secondary" id="flashReadBtn">Read Card</button>
+          <button class="secondary" id="flashStopReadBtn">Stop Reading</button>
+        </div>
+        <p class="tiny muted">Shortcuts: <span class="kbd">Space</span> flip, <span class="kbd">&larr;</span>/<span class="kbd">&rarr;</span> navigate, <span class="kbd">S</span> shuffle.</p>
+      </section>
+
+      <aside class="panel sticky side-panel">
+        <div class="summary">
+          <strong id="flashCounter">Card 1/60</strong>
+          <div class="muted" id="flashSkill">Skill: Planning</div>
+        </div>
+      </aside>
+    </main>
+  </div>
 </div>
 
 <script>
