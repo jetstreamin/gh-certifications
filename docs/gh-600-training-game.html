@@ -360,6 +360,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
         <button class="danger" id="restartBtn">Restart</button>
         <button class="secondary" id="themeBtn">Theme: Light</button>
         <button class="secondary" id="readToggleBtn">Auto Read: Off</button>
+        <button class="secondary" id="soundToggleBtn">Sound: On</button>
       </div>
       <div class="tiny" id="status">Ready. Press Start.</div>
     </aside>
@@ -435,6 +436,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   const MIN_DROP_MS = 320;
   const STATE_KEY = 'gh600-drop-drill-scoreboard-v1';
   const THEME_KEY = 'gh600-drop-drill-theme-v1';
+  const SOUND_KEY = 'gh600-drop-drill-sound-v1';
 
   const ZONES = [
     { label: 'A', min: 0, max: 1, center: 0 },
@@ -461,6 +463,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     'Persistent local scoreboard with top runs',
     'Live HUD: score, level, lines, lives, streak, accuracy',
     'Keyboard and click controls for answers and movement',
+    'Gameplay sound effects with on/off toggle',
     'Read-aloud for questions (Web Speech API)',
     'Dark/light theme with persistence',
     'Fully static client-side implementation for GitHub Pages'
@@ -472,6 +475,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     'Move piece: Left / Right arrows or A / D (only if current answer is correct)',
     'Soft drop: Down arrow or S',
     'Rotate: Up arrow or W (only if current answer is correct)',
+    'Sound toggle: Sound button',
     'Read question: R, stop reading: X'
   ];
 
@@ -527,6 +531,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   const restartBtn = document.getElementById('restartBtn');
   const themeBtn = document.getElementById('themeBtn');
   const readToggleBtn = document.getElementById('readToggleBtn');
+  const soundToggleBtn = document.getElementById('soundToggleBtn');
   const readNowBtn = document.getElementById('readNowBtn');
   const stopReadBtn = document.getElementById('stopReadBtn');
 
@@ -552,7 +557,92 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   let highScore = 0;
   let history = [];
   let autoRead = false;
+  let soundEnabled = true;
   let canSpeak = 'speechSynthesis' in window;
+  let audioCtx = null;
+  let masterGain = null;
+  let lastMoveSfxAt = 0;
+
+  function ensureAudio() {
+    if (audioCtx) return;
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    audioCtx = new Ctx();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.18;
+    masterGain.connect(audioCtx.destination);
+  }
+
+  function resumeAudio() {
+    ensureAudio();
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  }
+
+  function setSoundEnabled(enabled) {
+    soundEnabled = !!enabled;
+    localStorage.setItem(SOUND_KEY, soundEnabled ? 'on' : 'off');
+    soundToggleBtn.textContent = soundEnabled ? 'Sound: On' : 'Sound: Off';
+  }
+
+  function playTone(freq, durationMs, type = 'sine', volume = 0.12, whenOffset = 0) {
+    if (!soundEnabled) return;
+    ensureAudio();
+    if (!audioCtx || !masterGain) return;
+
+    const now = audioCtx.currentTime + whenOffset;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, now);
+
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(volume, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + durationMs / 1000);
+
+    osc.connect(gain);
+    gain.connect(masterGain);
+    osc.start(now);
+    osc.stop(now + durationMs / 1000 + 0.02);
+  }
+
+  function playSfx(kind) {
+    if (!soundEnabled) return;
+    resumeAudio();
+    switch (kind) {
+      case 'correct':
+        playTone(520, 90, 'triangle', 0.1, 0);
+        playTone(660, 110, 'triangle', 0.1, 0.06);
+        break;
+      case 'wrong':
+        playTone(240, 160, 'sawtooth', 0.12, 0);
+        break;
+      case 'line':
+        playTone(420, 90, 'square', 0.1, 0);
+        playTone(520, 90, 'square', 0.1, 0.05);
+        break;
+      case 'level':
+        playTone(440, 80, 'triangle', 0.1, 0);
+        playTone(554, 80, 'triangle', 0.1, 0.06);
+        playTone(659, 120, 'triangle', 0.1, 0.12);
+        break;
+      case 'land':
+        playTone(320, 70, 'sine', 0.07, 0);
+        break;
+      case 'move':
+        playTone(380, 30, 'square', 0.05, 0);
+        break;
+      case 'gameover':
+        playTone(330, 120, 'sawtooth', 0.1, 0);
+        playTone(247, 180, 'sawtooth', 0.1, 0.08);
+        playTone(196, 220, 'sawtooth', 0.1, 0.18);
+        break;
+      default:
+        break;
+    }
+  }
 
   function createBoard() {
     return Array.from({ length: ROWS }, () => Array(COLS).fill(0));
@@ -633,11 +723,14 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       }
     }
     if (cleared > 0) {
+      const prevLevel = level;
       lines += cleared;
       const bonus = [0, 100, 300, 500, 800][Math.min(cleared, 4)];
       score += bonus * level;
       level = 1 + Math.floor(lines / 8);
       feedback.textContent = `Line clear x${cleared}. +${bonus * level} points.`;
+      playSfx('line');
+      if (level > prevLevel) playSfx('level');
     }
   }
 
@@ -684,6 +777,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       streak += 1;
       score += 120 + streak * 12;
       feedback.innerHTML = `<strong style="color:var(--good);">Correct.</strong> Movement unlocked. ${currentPiece.question.why}`;
+      playSfx('correct');
     } else {
       currentPiece.correct = false;
       currentPiece.lockedSteer = true;
@@ -692,6 +786,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       score = Math.max(0, score - 60);
       feedback.innerHTML = `<strong style="color:var(--bad);">Wrong.</strong> Life lost. Correct answer: ${String.fromCharCode(65 + correctIdx)}. ${currentPiece.question.o[correctIdx]}`;
       status.textContent = 'Wrong answer locked movement for this piece.';
+      playSfx('wrong');
       if (lives <= 0) endGame();
     }
 
@@ -720,6 +815,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
 
     feedback.innerHTML = `<strong style="color:var(--bad);">No answer submitted.</strong> Life lost. Correct answer: ${String.fromCharCode(65 + correctIdx)}. ${currentPiece.question.o[correctIdx]}`;
     status.textContent = 'No response before lock. Piece remained movement-locked.';
+    playSfx('wrong');
 
     if (lives <= 0) {
       endGame();
@@ -754,9 +850,11 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       if (landingLane === currentPiece.question.a) {
         score += 160;
         feedback.innerHTML = `<strong style="color:var(--good);">Perfect drop.</strong> Landed in zone ${String.fromCharCode(65 + landingLane)}.`;
+        playSfx('correct');
       } else {
         score += 35;
         feedback.textContent = 'Correct answer, but not the matching zone. Smaller bonus applied.';
+        playSfx('land');
       }
     }
 
@@ -906,6 +1004,8 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       localStorage.setItem('gh600-drop-drill-highscore-v1', String(highScore));
     }
 
+    playSfx('gameover');
+
     saveRun();
     updateHud();
     draw();
@@ -949,6 +1049,9 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     }
 
     const theme = localStorage.getItem(THEME_KEY) || 'light';
+    const soundPref = localStorage.getItem(SOUND_KEY);
+    if (soundPref === 'off') setSoundEnabled(false);
+    else setSoundEnabled(true);
     applyTheme(theme);
     updateHud();
     renderScoreboard();
@@ -1024,7 +1127,14 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     }
 
     if (key === 'ArrowDown') {
-      if (!collides(currentPiece, 0, 1)) currentPiece.y += 1;
+      if (!collides(currentPiece, 0, 1)) {
+        currentPiece.y += 1;
+        const now = performance.now();
+        if (now - lastMoveSfxAt > 90) {
+          playSfx('move');
+          lastMoveSfxAt = now;
+        }
+      }
       return;
     }
 
@@ -1035,15 +1145,25 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       return;
     }
 
-    if (key === 'ArrowLeft' && !collides(currentPiece, -1, 0)) currentPiece.x -= 1;
-    if (key === 'ArrowRight' && !collides(currentPiece, 1, 0)) currentPiece.x += 1;
+    if (key === 'ArrowLeft' && !collides(currentPiece, -1, 0)) {
+      currentPiece.x -= 1;
+      playSfx('move');
+    }
+    if (key === 'ArrowRight' && !collides(currentPiece, 1, 0)) {
+      currentPiece.x += 1;
+      playSfx('move');
+    }
     if (key === 'ArrowUp') {
       const rot = rotate(currentPiece.shape);
-      if (!collides(currentPiece, 0, 0, rot)) currentPiece.shape = rot;
+      if (!collides(currentPiece, 0, 0, rot)) {
+        currentPiece.shape = rot;
+        playSfx('move');
+      }
     }
   }
 
   startBtn.addEventListener('click', () => {
+    resumeAudio();
     startGame();
   });
 
@@ -1067,6 +1187,11 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     readToggleBtn.textContent = autoRead ? 'Auto Read: On' : 'Auto Read: Off';
   });
 
+  soundToggleBtn.addEventListener('click', () => {
+    resumeAudio();
+    setSoundEnabled(!soundEnabled);
+  });
+
   readNowBtn.addEventListener('click', () => readCurrentQuestion());
   stopReadBtn.addEventListener('click', () => {
     if (canSpeak) window.speechSynthesis.cancel();
@@ -1075,6 +1200,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   boardCanvas.addEventListener('pointerdown', focusGameBoard);
   document.addEventListener('pointerdown', focusGameBoard, { capture: true });
   window.addEventListener('focus', focusGameBoard);
+  window.addEventListener('pointerdown', resumeAudio, { capture: true });
 
   window.addEventListener('keydown', handleKey, { capture: true });
 
