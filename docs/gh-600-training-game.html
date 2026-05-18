@@ -696,9 +696,35 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     updateHud();
   }
 
-  function autoFailUnanswered() {
+  function penalizeUnansweredOnLock() {
     if (!currentPiece || currentPiece.answered || gameOver) return;
-    answerQuestion(-1);
+
+    currentPiece.answered = true;
+    currentPiece.selected = -1;
+    currentPiece.correct = false;
+    currentPiece.lockedSteer = true;
+
+    answeredCount += 1;
+    streak = 0;
+    lives -= 1;
+    score = Math.max(0, score - 40);
+
+    const correctIdx = currentPiece.question.a;
+    const buttons = answerGrid.querySelectorAll('.answer-btn');
+    buttons.forEach((btn, idx) => {
+      btn.disabled = true;
+      if (idx === correctIdx) btn.classList.add('correct');
+    });
+
+    feedback.innerHTML = `<strong style="color:var(--bad);">No answer submitted.</strong> Life lost. Correct answer: ${String.fromCharCode(65 + correctIdx)}. ${currentPiece.question.o[correctIdx]}`;
+    status.textContent = 'No response before lock. Piece remained movement-locked.';
+
+    if (lives <= 0) {
+      endGame();
+      return;
+    }
+
+    updateHud();
   }
 
   function spawnPiece() {
@@ -713,6 +739,11 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   }
 
   function lockCurrentPiece() {
+    if (!currentPiece.answered) {
+      penalizeUnansweredOnLock();
+      if (gameOver) return;
+    }
+
     mergePiece(currentPiece);
     clearLines();
 
@@ -743,10 +774,6 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     const delta = timestamp - lastTime;
     lastTime = timestamp;
     dropTimer += delta;
-
-    if (currentPiece && !currentPiece.answered && currentPiece.y >= 8) {
-      autoFailUnanswered();
-    }
 
     if (dropTimer >= dropIntervalMs()) {
       dropTimer = 0;
