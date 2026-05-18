@@ -2,3 +2,13 @@ theme: jekyll-theme-minimal
 title: GitHub Certifications
 description: Learning hub for GitHub security and advanced topics certifications
 show_downloads: false
+
+# Build settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+# GitHub Pages settings
+url: "https://jetstreamin.github.io"
+baseurl: "/gh-certifications"
