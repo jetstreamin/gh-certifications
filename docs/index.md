@@ -14,6 +14,15 @@ Welcome to the GitHub Certifications learning repository. This resource document
   - Orchestrate multi-agent coordination
   - Implement guardrails and accountability
 
+### Copilot Custom Agents Administration
+
+- **[Custom Agents Admin Guide](./custom-agents-admin-guide.md)** — Complete guide for organization owners setting up and managing custom Copilot agents. Covers repository setup, agent lifecycle, compliance, and governance.
+  - Organization setup and prerequisites
+  - Agent creation and approval workflows
+  - Compliance and security requirements
+  - Tools management and permissions
+  - Monitoring and metrics
+
 ### CodeQL & Code Security
 
 - **[Prepare a Database for CodeQL](./codeql/01-database-preparation.md)** — Learn how to install the CodeQL CLI, set up databases, and understand extractors for code analysis.
