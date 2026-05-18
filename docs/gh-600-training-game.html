@@ -387,7 +387,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
 
     <section class="center-col">
       <article class="panel board-wrap">
-        <canvas id="board" width="340" height="680" aria-label="GH-600 Drop Drill board"></canvas>
+        <canvas id="board" width="340" height="680" tabindex="0" aria-label="GH-600 Drop Drill board"></canvas>
         <div class="zones" id="zones"></div>
         <div class="tiny">Pick answer with <span class="kbd">1</span>-<span class="kbd">4</span>; move with <span class="kbd">←</span> <span class="kbd">→</span>; rotate with <span class="kbd">↑</span>; drop with <span class="kbd">↓</span>.</div>
       </article>
@@ -863,6 +863,11 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     });
   }
 
+  function focusGameBoard() {
+    if (!boardCanvas) return;
+    boardCanvas.focus({ preventScroll: true });
+  }
+
   function highlightZone(choice) {
     zonesEl.querySelectorAll('.zone').forEach((zoneEl, i) => {
       zoneEl.classList.toggle('active', i === choice);
@@ -888,6 +893,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     spawnPiece();
     draw();
     updateHud();
+    focusGameBoard();
   }
 
   function endGame() {
@@ -1022,7 +1028,12 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       return;
     }
 
-    if (currentPiece.lockedSteer) return;
+    if (currentPiece.lockedSteer) {
+      if (key === 'ArrowLeft' || key === 'ArrowRight' || key === 'ArrowUp') {
+        status.textContent = 'Movement is locked for this piece until you answer correctly.';
+      }
+      return;
+    }
 
     if (key === 'ArrowLeft' && !collides(currentPiece, -1, 0)) currentPiece.x -= 1;
     if (key === 'ArrowRight' && !collides(currentPiece, 1, 0)) currentPiece.x += 1;
@@ -1061,11 +1072,16 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     if (canSpeak) window.speechSynthesis.cancel();
   });
 
+  boardCanvas.addEventListener('pointerdown', focusGameBoard);
+  document.addEventListener('pointerdown', focusGameBoard, { capture: true });
+  window.addEventListener('focus', focusGameBoard);
+
   window.addEventListener('keydown', handleKey, { capture: true });
 
   fillLists();
   loadPersisted();
   startGame();
+  setTimeout(focusGameBoard, 0);
   requestAnimationFrame(tick);
 })();
 </script>
