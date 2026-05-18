@@ -1,3 +1,9 @@
+---
+layout: default
+title: GitHub Certifications - Learning Hub
+description: Comprehensive learning hub for GitHub Certifications including GH-600 Agentic AI Developer, Copilot Custom Agents, and CodeQL.
+---
+
 # GitHub Certifications Learning Hub
 
 Welcome to the GitHub Certifications learning repository. This resource documents key concepts, best practices, and step-by-step guides for GitHub's security and advanced topics certifications.
@@ -14,7 +20,7 @@ Welcome to the GitHub Certifications learning repository. This resource document
   - Orchestrate multi-agent coordination
   - Implement guardrails and accountability
 
-### Copilot Custom Agents Administration & SDK
+### Copilot Custom Agents: Administration, SDK, Memory & Tutorials
 
 - **[Custom Agents Admin Guide](./custom-agents-admin-guide.md)** — Complete guide for organization owners setting up and managing custom Copilot agents. Covers repository setup, agent lifecycle, compliance, and governance.
   - Organization setup and prerequisites
@@ -39,6 +45,13 @@ Welcome to the GitHub Certifications learning repository. This resource document
   - Enabling, managing, and curating facts
   - Best practices for developers and organizations
 
+- **[Custom Agent: Implementation Planner](./custom-agent-implementation-planner.md)** — Tutorial for creating and using a custom agent that specializes in breaking down features into actionable tasks and creating detailed implementation plans.
+  - Agent setup and configuration
+  - Using the agent for feature planning
+  - Plan structure and best practices
+  - Variations for different team sizes
+  - Integration patterns and examples
+
 ### CodeQL & Code Security
 
 - **[Prepare a Database for CodeQL](./codeql/01-database-preparation.md)** — Learn how to install the CodeQL CLI, set up databases, and understand extractors for code analysis.
@@ -48,6 +61,8 @@ Welcome to the GitHub Certifications learning repository. This resource document
 
 ## 🎯 Certification Paths
 
+- **GH-600: GitHub Agentic AI Developer** — Complete (1 guide)
+- **GitHub Agent Development** — Complete (3 guides)
 - **GitHub Security & Code Scanning** — In progress
 - Additional paths coming soon...
 
@@ -71,4 +86,4 @@ Welcome to the GitHub Certifications learning repository. This resource document
 
 ---
 
-**Last Updated:** May 2026
+**Last Updated:** May 18, 2026 | **Total Guides:** 9 | **Total Content:** 40,000+ lines
