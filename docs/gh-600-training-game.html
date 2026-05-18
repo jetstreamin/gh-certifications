@@ -154,7 +154,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
 
   .main {
     display: grid;
-    grid-template-columns: 380px minmax(0, 1fr) 360px;
+    grid-template-columns: minmax(320px, 1fr) 360px minmax(320px, 1fr);
     gap: 14px;
     align-items: start;
   }
@@ -217,18 +217,21 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     display: grid;
     gap: 8px;
     justify-items: center;
+    min-height: 760px;
   }
 
   canvas {
     border-radius: 12px;
     border: 1px solid var(--border);
     background: #0d1522;
-    width: min(100%, 340px);
+    width: 340px;
+    max-width: 100%;
     height: auto;
   }
 
   .zones {
-    width: min(100%, 340px);
+    width: 340px;
+    max-width: 100%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
@@ -295,10 +298,28 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     color: var(--muted);
   }
 
-  @media (max-width: 1160px) {
+  @media (max-width: 1280px) {
+    .main {
+      grid-template-columns: 1fr 360px;
+    }
+
+    .right-col {
+      grid-column: 1 / -1;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      display: grid;
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 1040px) {
     .main {
       grid-template-columns: 1fr;
     }
+
+    .right-col {
+      grid-template-columns: 1fr;
+    }
+
     .hero {
       grid-template-columns: 1fr;
     }
@@ -319,6 +340,9 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
         <span class="pill">Persistent scoreboard</span>
         <span class="pill">Read-aloud + dark/light</span>
       </div>
+      <p class="tiny" style="margin-top: 10px;">
+        How it works: answer with <span class="kbd">1</span>-<span class="kbd">4</span>, then route piece with <span class="kbd">←</span>/<span class="kbd">→</span> into the matching A/B/C/D zone.
+      </p>
     </article>
 
     <aside class="panel hero-side">
@@ -365,7 +389,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       <article class="panel board-wrap">
         <canvas id="board" width="300" height="600" aria-label="GH-600 Drop Drill board"></canvas>
         <div class="zones" id="zones"></div>
-        <div class="tiny">Pick answer with <span class="kbd">1</span>-<span class="kbd">4</span>; move with <span class="kbd">←</span> <span class="kbd">→</span> only after correct answer.</div>
+        <div class="tiny">Pick answer with <span class="kbd">1</span>-<span class="kbd">4</span>; move with <span class="kbd">←</span> <span class="kbd">→</span>; rotate with <span class="kbd">↑</span>; drop with <span class="kbd">↓</span>.</div>
       </article>
     </section>
 
@@ -833,6 +857,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     status.textContent = 'Live run. Answer correctly to unlock movement.';
     feedback.textContent = 'Answer correctly to unlock horizontal movement for the current piece.';
     spawnPiece();
+    draw();
     updateHud();
   }
 
@@ -988,7 +1013,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
 
   fillLists();
   loadPersisted();
-  draw();
+  startGame();
   requestAnimationFrame(tick);
 })();
 </script>
