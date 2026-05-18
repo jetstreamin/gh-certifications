@@ -973,6 +973,12 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   }
 
   function handleKey(event) {
+    const navKeys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' ', 'Spacebar'];
+    const answerKeys = ['1', '2', '3', '4'];
+    if (navKeys.includes(event.key) || answerKeys.includes(event.key)) {
+      event.preventDefault();
+    }
+
     if (!gameRunning || paused || gameOver || !currentPiece) return;
 
     if (event.key >= '1' && event.key <= '4') {
