@@ -1,0 +1,1211 @@
+---
+layout: default
+title: GH-600 Native Mock Exam
+description: A native 60-question GH-600 mock exam with timed mode, scoring, answer review, and skill breakdown.
+---
+
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f3efe7;
+    --bg-2: #efe6d6;
+    --panel: #fffaf2;
+    --ink: #14202b;
+    --muted: #5d6772;
+    --accent: #0f5f6a;
+    --accent-2: #b45309;
+    --good: #166534;
+    --bad: #9f1239;
+    --border: rgba(20, 32, 43, 0.12);
+    --shadow: 0 18px 50px rgba(20, 32, 43, 0.14);
+  }
+
+  body {
+    margin: 0;
+    font-family: Aptos, "Segoe UI", sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at top left, rgba(15, 95, 106, 0.14), transparent 30%),
+      radial-gradient(circle at top right, rgba(180, 83, 9, 0.12), transparent 28%),
+      linear-gradient(180deg, var(--bg), var(--bg-2));
+  }
+
+  .exam-shell {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 20px 56px;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 20px;
+    align-items: stretch;
+    margin-bottom: 20px;
+  }
+
+  .hero-card,
+  .panel {
+    background: rgba(255, 250, 242, 0.92);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+  }
+
+  .hero-card {
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-card::after {
+    content: "";
+    position: absolute;
+    inset: auto -40px -60px auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(15, 95, 106, 0.16), transparent 70%);
+    pointer-events: none;
+  }
+
+  h1 {
+    margin: 0 0 12px;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+
+  .lede {
+    max-width: 70ch;
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0 0 18px;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(15, 95, 106, 0.08);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.92rem;
+  }
+
+  .side-panel {
+    padding: 22px;
+    display: grid;
+    gap: 14px;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .stat {
+    padding: 16px;
+    border-radius: 18px;
+    background: rgba(20, 32, 43, 0.04);
+    border: 1px solid var(--border);
+  }
+
+  .stat .label {
+    display: block;
+    color: var(--muted);
+    font-size: 0.86rem;
+    margin-bottom: 6px;
+  }
+
+  .stat .value {
+    font-size: 1.4rem;
+    font-weight: 800;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  button {
+    border: 0;
+    border-radius: 14px;
+    padding: 12px 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  }
+
+  button:hover {
+    transform: translateY(-1px);
+  }
+
+  .primary {
+    background: linear-gradient(135deg, var(--accent), #0b7280);
+    color: white;
+    box-shadow: 0 10px 26px rgba(15, 95, 106, 0.24);
+  }
+
+  .secondary {
+    background: rgba(20, 32, 43, 0.06);
+    color: var(--ink);
+  }
+
+  .danger {
+    background: rgba(159, 18, 57, 0.08);
+    color: var(--bad);
+  }
+
+  .progress-wrap {
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .progress-bar {
+    height: 12px;
+    background: rgba(20, 32, 43, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .progress-bar > div {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: inherit;
+    transition: width 0.25s ease;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .questions {
+    display: grid;
+    gap: 14px;
+  }
+
+  .question {
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: rgba(255, 250, 242, 0.96);
+  }
+
+  .question h2 {
+    margin: 0 0 8px;
+    font-size: 1.02rem;
+    line-height: 1.45;
+  }
+
+  .skill-tag {
+    display: inline-flex;
+    margin-bottom: 10px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(15, 95, 106, 0.09);
+  }
+
+  .options {
+    display: grid;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .option {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(20, 32, 43, 0.12);
+    background: white;
+  }
+
+  .option input {
+    margin-top: 3px;
+  }
+
+  .option.correct {
+    border-color: rgba(22, 101, 52, 0.34);
+    background: rgba(22, 101, 52, 0.08);
+  }
+
+  .option.wrong {
+    border-color: rgba(159, 18, 57, 0.36);
+    background: rgba(159, 18, 57, 0.08);
+  }
+
+  .review-card {
+    padding: 16px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: white;
+  }
+
+  .review-card + .review-card {
+    margin-top: 12px;
+  }
+
+  .review-title {
+    margin: 0 0 8px;
+    font-size: 1rem;
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+
+  .summary {
+    display: grid;
+    gap: 10px;
+  }
+
+  .summary strong {
+    font-size: 1.8rem;
+  }
+
+  .tiny {
+    font-size: 0.88rem;
+  }
+
+  .sticky {
+    position: sticky;
+    top: 16px;
+  }
+
+  .skill-breakdown {
+    display: grid;
+    gap: 10px;
+  }
+
+  .skill-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: center;
+    font-size: 0.94rem;
+  }
+
+  .bar {
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(20, 32, 43, 0.08);
+    overflow: hidden;
+  }
+
+  .bar > div {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: inherit;
+  }
+
+  .results {
+    margin-top: 18px;
+    padding: 22px;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .notice {
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(15, 95, 106, 0.08);
+    border: 1px solid rgba(15, 95, 106, 0.18);
+    color: var(--ink);
+  }
+
+  .mode-switch {
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .mode-btn {
+    background: rgba(20, 32, 43, 0.06);
+    color: var(--ink);
+  }
+
+  .mode-btn.active {
+    background: linear-gradient(135deg, var(--accent), #0b7280);
+    color: white;
+    box-shadow: 0 10px 26px rgba(15, 95, 106, 0.24);
+  }
+
+  .kbd {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 7px;
+    border-radius: 8px;
+    border: 1px solid rgba(20, 32, 43, 0.25);
+    background: rgba(20, 32, 43, 0.06);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .study-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .study-card {
+    padding: 22px;
+  }
+
+  .study-controls,
+  .flash-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+
+  .study-options {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .answer-btn {
+    text-align: left;
+    background: white;
+    border: 1px solid rgba(20, 32, 43, 0.16);
+    color: var(--ink);
+    border-radius: 14px;
+    padding: 12px 14px;
+  }
+
+  .answer-btn.correct {
+    border-color: rgba(22, 101, 52, 0.34);
+    background: rgba(22, 101, 52, 0.08);
+  }
+
+  .answer-btn.wrong {
+    border-color: rgba(159, 18, 57, 0.36);
+    background: rgba(159, 18, 57, 0.08);
+  }
+
+  .study-feedback {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(20, 32, 43, 0.04);
+  }
+
+  .flash-card {
+    padding: 22px;
+    min-height: 260px;
+    display: grid;
+    align-content: center;
+    gap: 12px;
+    border-radius: 22px;
+    border: 1px solid var(--border);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(255, 248, 235, 0.98));
+  }
+
+  .flash-card h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.45;
+  }
+
+  .flash-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .flash-answer {
+    border-top: 1px dashed rgba(20, 32, 43, 0.22);
+    padding-top: 10px;
+  }
+
+  @media (max-width: 960px) {
+    .study-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .hero,
+    .layout {
+      grid-template-columns: 1fr;
+    }
+
+    .sticky {
+      position: static;
+    }
+  }
+    <section class="panel mode-switch">
+      <strong>Mode</strong>
+      <button class="mode-btn active" id="examModeBtn">Exam Mode</button>
+      <button class="mode-btn" id="studyModeBtn">Study Mode</button>
+      <button class="mode-btn" id="flashModeBtn">Flash Cards</button>
+      <button class="mode-btn" id="readAloudToggleBtn">Read Aloud: Off</button>
+      <span class="muted tiny">All modes run fully client-side for GitHub Pages compatibility.</span>
+    </section>
+
+    <div id="examModeView">
+      <section class="panel progress-wrap">
+        <div class="progress-top">
+          <strong>Progress</strong>
+          <span class="muted" id="progressLabel">0 of 60 answered</span>
+        <span class="pill">Pass line: 51/60</span>
+        <div class="progress-bar"><div id="progressFill"></div></div>
+      </section>
+
+      <main class="layout">
+        <section class="questions" id="questions"></section>
+
+        <aside class="panel sticky side-panel">
+          <div class="summary">
+            <strong id="finalScore">Score: --</strong>
+            <div class="muted" id="passMessage">Submit the exam to score it and reveal the correct answers.</div>
+          </div>
+          <div>
+            <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Skill Breakdown</h2>
+            <div class="skill-breakdown" id="skillBreakdown"></div>
+          </div>
+          <div>
+            <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Answer Review</h2>
+            <div id="reviewSummary" class="tiny muted">No answers scored yet.</div>
+          </div>
+        </aside>
+      </main>
+
+      <section class="panel results hidden" id="resultsPanel">
+        <h2 style="margin-top: 0;">Detailed Review</h2>
+        <div id="reviewCards"></div>
+      </section>
+    </div>
+
+    <div id="studyModeView" class="hidden">
+      <main class="study-grid">
+        <section class="panel study-card">
+          <div class="skill-tag" id="studySkill">Planning</div>
+          <h2 id="studyPrompt" style="margin: 0;"></h2>
+          <div class="study-options" id="studyOptions"></div>
+          <div id="studyFeedback" class="study-feedback tiny muted">Pick an answer to get instant feedback and rationale.</div>
+          <div class="study-controls">
+            <button class="secondary" id="studyPrevBtn">Previous</button>
+            <button class="secondary" id="studyNextBtn">Next</button>
+            <button class="secondary" id="studyRandomBtn">Random</button>
+            <button class="secondary" id="studyReadBtn">Read Question</button>
+            <button class="secondary" id="studyStopReadBtn">Stop Reading</button>
+          </div>
+          <p class="tiny muted">Shortcuts: <span class="kbd">1</span>-<span class="kbd">4</span> answer, <span class="kbd">&larr;</span>/<span class="kbd">&rarr;</span> navigate, <span class="kbd">R</span> random.</p>
+        </section>
+
+        <aside class="panel sticky side-panel">
+          <div class="summary">
+            <strong id="studyCounter">Question 1/60</strong>
+            <div class="muted" id="studyStatus">Study Mode gives immediate correct/incorrect feedback after each answer.</div>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <div id="flashModeView" class="hidden">
+      <main class="study-grid">
+        <section class="panel study-card">
+          <article class="flash-card" id="flashCard">
+            <div class="flash-label" id="flashFaceLabel">Question</div>
+            <h2 id="flashFront"></h2>
+            <div id="flashBack" class="flash-answer hidden tiny"></div>
+          </article>
+          <div class="flash-controls">
+            <button class="secondary" id="flashPrevBtn">Previous</button>
+            <button class="primary" id="flashFlipBtn">Flip</button>
+            <button class="secondary" id="flashNextBtn">Next</button>
+            <button class="secondary" id="flashShuffleBtn">Shuffle Deck</button>
+            <button class="secondary" id="flashReadBtn">Read Card</button>
+            <button class="secondary" id="flashStopReadBtn">Stop Reading</button>
+          </div>
+          <p class="tiny muted">Shortcuts: <span class="kbd">Space</span> flip, <span class="kbd">&larr;</span>/<span class="kbd">&rarr;</span> navigate, <span class="kbd">S</span> shuffle.</p>
+        </section>
+
+        <aside class="panel sticky side-panel">
+          <div class="summary">
+            <strong id="flashCounter">Card 1/60</strong>
+            <div class="muted" id="flashSkill">Skill: Planning</div>
+          </div>
+        </aside>
+      </main>
+    </div>
+        <div class="stat">
+          <span class="label">Score</span>
+          <div class="value" id="scoreCount">--</div>
+        </div>
+        <div class="stat">
+          <span class="label">Status</span>
+          <div class="value" id="statusText">Ready</div>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="primary" id="startBtn">Start Exam</button>
+        <button class="secondary" id="submitBtn">Score Exam</button>
+        <button class="danger" id="resetBtn">Reset</button>
+      </div>
+      <div class="notice tiny">
+        Tip: answer quickly, then review only the items you missed. That is the closest rehearsal to the real exam.
+      </div>
+    </aside>
+  </section>
+
+  <section class="panel progress-wrap">
+    <div class="progress-top">
+      <strong>Progress</strong>
+      <span class="muted" id="progressLabel">0 of 60 answered</span>
+    </div>
+    <div class="progress-bar"><div id="progressFill"></div></div>
+  </section>
+
+  <main class="layout">
+    <section class="questions" id="questions"></section>
+
+    <aside class="panel sticky side-panel">
+      <div class="summary">
+        <strong id="finalScore">Score: --</strong>
+        <div class="muted" id="passMessage">Submit the exam to score it and reveal the correct answers.</div>
+      </div>
+      <div>
+        <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Skill Breakdown</h2>
+        <div class="skill-breakdown" id="skillBreakdown"></div>
+      </div>
+      <div>
+        <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Answer Review</h2>
+        <div id="reviewSummary" class="tiny muted">No answers scored yet.</div>
+      </div>
+    </aside>
+  </main>
+
+  <section class="panel results hidden" id="resultsPanel">
+    <h2 style="margin-top: 0;">Detailed Review</h2>
+    <div id="reviewCards"></div>
+  </section>
+</div>
+
+<script>
+(function () {
+  const QUESTIONS = [
+    { skill: 'Planning', question: 'A team wants an agent to triage failing pull request checks, propose a fix, and open a PR automatically. Which control is most important to require first?', options: ['Allow the agent to modify any file in the repository', 'Require explicit human approval before merge or PR publication', 'Disable observability so the agent is faster', 'Let the agent choose its own tools dynamically'], answer: 1, explanation: 'High-risk agent actions need explicit approval before publication or merge.' },
+    { skill: 'Planning', question: 'An agent should reason about a change, validate assumptions, and only then perform the action. What is the strongest reason to separate those phases?', options: ['It makes the model larger', 'It keeps the workflow offline', 'It enables validation before impact', 'It removes the need for logs'], answer: 2, explanation: 'Planning and execution must be separated so the plan can be checked before the action happens.' },
+    { skill: 'Planning', question: 'Which success criterion is the best exam-style answer for an agent workflow?', options: ['The output sounds clever', 'The agent responds quickly', 'Tests pass and the result meets measurable criteria', 'The prompt is long'], answer: 2, explanation: 'GH-600 favors measurable outcomes over style or confidence.' },
+    { skill: 'Planning', question: 'A protected repository needs automation, but the team wants to avoid risky changes. What autonomy level is safest?', options: ['Unrestricted autonomous', 'Advisory only', 'Scoped with approval', 'No logs and no approvals'], answer: 2, explanation: 'Scoped autonomy with approval is the safest production pattern.' },
+    { skill: 'Planning', question: 'Why are signed commits, logs, and artifacts important in agent workflows?', options: ['They make the UI prettier', 'They create a traceable audit trail', 'They eliminate review', 'They reduce token usage'], answer: 1, explanation: 'Auditability is a core exam theme.' },
+    { skill: 'Planning', question: 'An agent keeps working from stale repository facts. What should be done first?', options: ['Ignore the stale facts', 'Increase temperature', 'Refresh the repository context and instructions', 'Delete the tests'], answer: 2, explanation: 'Repo facts and instructions must stay current.' },
+    { skill: 'Planning', question: 'What is the best response to a high-risk change when time is short?', options: ['Skip review to stay fast', 'Use human-in-the-loop approval and a rollback path', 'Ask the agent to self-certify', 'Merge it in a draft state'], answer: 1, explanation: 'Speed never overrides control on high-impact changes.' },
+    { skill: 'Planning', question: 'A review question asks what matters most when judging agent output quality. Which is best?', options: ['How confident the agent sounds', 'How many tokens it used', 'Whether it passed checks and met success criteria', 'Whether it used bold wording'], answer: 2, explanation: 'Passing checks and meeting criteria are what matter.' },
+    { skill: 'Planning', question: 'Two agents are about to edit the same file. What is the best control?', options: ['Let both write and sort it out later', 'Add conflict detection and resource locks', 'Disable reviews', 'Let the faster agent win'], answer: 1, explanation: 'Conflict detection prevents contradictory work.' },
+    { skill: 'Planning', question: 'After an agent run fails, what is the most valuable next step?', options: ['Blame the model', 'Review the root cause across reasoning, permissions, tools, context, and resources', 'Rerun endlessly', 'Hide the logs'], answer: 1, explanation: 'Failure analysis should isolate the root cause category.' },
+
+    { skill: 'Tools', question: 'An agent keeps failing because the required tool is missing. What should you do?', options: ['Increase the model temperature', 'Give it more context only', 'Restrict the agent to the exact tools it needs and verify availability', 'Remove all approval gates'], answer: 2, explanation: 'Tool availability and exact scope must be fixed directly.' },
+    { skill: 'Tools', question: 'Which setup best matches least privilege for a repository analysis agent?', options: ['All tools enabled', 'Read-only view/search tools and no write access', 'Full deploy access', 'No logs and no constraints'], answer: 1, explanation: 'Read-only scoped tools are the safest starting point.' },
+    { skill: 'Tools', question: 'For protected repositories, what should be planned before automation begins?', options: ['The prettiest PR template', 'Enterprise and organization policies, rulesets, and runner settings', 'The most powerful model', 'A hidden prompt comment'], answer: 1, explanation: 'Policy and runner settings are key guardrails.' },
+    { skill: 'Tools', question: 'Which is the best guardrail for sensitive code changes?', options: ['Allow any tool', 'Block secrets and require code-owner review', 'Disable branches', 'Auto-merge all edits'], answer: 1, explanation: 'Sensitive files need explicit access controls and review.' },
+    { skill: 'Tools', question: 'Why should outputs like JSON or SARIF be used during agent workflows?', options: ['They look technical', 'They are machine-readable, reviewable, and auditable', 'They hide mistakes', 'They replace humans'], answer: 1, explanation: 'Structured artifacts support review and traceability.' },
+    { skill: 'Tools', question: 'A required tool is unreliable, but the deadline is close. What is the best immediate move?', options: ['Ignore the failures', 'Expand autonomy', 'Narrow the task and add fallback validation', 'Delete the test plan'], answer: 2, explanation: 'Reduce risk and add validation instead of trusting a weak tool.' },
+    { skill: 'Tools', question: 'What is the safest production pattern for a code-writing agent?', options: ['Maximum autonomy', 'Scoped tools, approvals, logs, and rollback paths', 'No tooling at all', 'Unreviewed merge access'], answer: 1, explanation: 'This pattern best balances safety and productivity.' },
+    { skill: 'Tools', question: 'What is the right first step when an agent needs deployment-script access but not broad repository edit rights?', options: ['Grant full repository write access', 'Add a specific tool or scoped permission', 'Remove all tools', 'Disable observability'], answer: 1, explanation: 'Grant only the access required for the job.' },
+    { skill: 'Tools', question: 'How should an agent handle secrets that appear in an input file?', options: ['Echo them in logs', 'Treat them as normal text', 'Block or redact them and require review', 'Use them as context for better reasoning'], answer: 2, explanation: 'Secrets must not be propagated casually.' },
+    { skill: 'Tools', question: 'Why is scoped write access better than broad write access?', options: ['It is always faster', 'It reduces blast radius and limits unintended changes', 'It removes the need for approvals', 'It makes output longer'], answer: 1, explanation: 'Blast radius reduction is a central safety concept.' },
+
+    { skill: 'Memory', question: 'Why should repository facts stay current in Copilot Memory or instructions?', options: ['So the agent can skip validation', 'So behavior matches current repo conventions', 'So every answer is identical', 'So humans no longer need context'], answer: 1, explanation: 'Current facts keep the agent aligned with the repo.' },
+    { skill: 'Memory', question: 'A repository structure changes and the agent starts failing. What is the best response?', options: ['Rerun blindly', 'Update instructions or state and retest', 'Delete all memory', 'Increase token count only'], answer: 1, explanation: 'Repo changes often require updated context and state.' },
+    { skill: 'Memory', question: 'What should persistent memory store?', options: ['Every temporary error log forever', 'Stable facts, user preferences, and useful repo conventions', 'Secrets and passwords', 'Only random guesses'], answer: 1, explanation: 'Memory should capture stable, useful context.' },
+    { skill: 'Memory', question: 'What is the best way to handle stale instructions?', options: ['Keep them forever', 'Prune them and keep the minimum necessary context', 'Add more stale notes', 'Hide them in comments'], answer: 1, explanation: 'Minimal, current context is safer than stale bulk.' },
+    { skill: 'Memory', question: 'If the source of truth and the agent memory disagree, what should happen?', options: ['Trust memory because it is faster', 'Keep both and hope for the best', 'Update memory to match the source of truth', 'Ignore the conflict'], answer: 2, explanation: 'Memory should align to authoritative repo state.' },
+    { skill: 'Memory', question: 'What is the main purpose of memory in an agent workflow?', options: ['Replace review', 'Provide continuity across tasks', 'Store secrets', 'Remove the need for prompts'], answer: 1, explanation: 'Memory helps continuity, not authority.' },
+    { skill: 'Memory', question: 'What should a state note include after a completed agent task?', options: ['Only the model name', 'What changed, why, and any pending issues', 'Nothing at all', 'A copy of all secrets'], answer: 1, explanation: 'State should preserve actionable context.' },
+    { skill: 'Memory', question: 'A team wants to reduce stale guidance. What is the best practice?', options: ['Add more static documents without review', 'Review and update memory with repo changes', 'Turn off documentation', 'Keep one giant note forever'], answer: 1, explanation: 'Memory must be maintained as the repo evolves.' },
+    { skill: 'Memory', question: 'When should memory be trusted over human review?', options: ['Always', 'Never', 'Only for immutable secrets', 'Whenever the model feels certain'], answer: 1, explanation: 'Human review still governs high-risk decisions.' },
+    { skill: 'Memory', question: 'What is the clearest sign of context drift?', options: ['The agent answers quickly', 'The agent starts using outdated assumptions', 'The repo gains a README', 'The model name changes'], answer: 1, explanation: 'Outdated assumptions indicate drift.' },
+
+    { skill: 'Evaluation', question: 'Which evaluation signal is strongest for an agent change?', options: ['Whether it sounds clever', 'Whether it is longer than before', 'Whether tests and security checks pass and the result meets criteria', 'Whether the agent sounded confident'], answer: 2, explanation: 'Evaluation must be grounded in objective success criteria.' },
+    { skill: 'Evaluation', question: 'What is the most important reason to review failures after an agent run?', options: ['To generate more buzz', 'To identify the root cause category', 'To avoid documentation', 'To make the model sound human'], answer: 1, explanation: 'Root cause analysis is essential for improvement.' },
+    { skill: 'Evaluation', question: 'A team has useful output but no evidence for how the decision happened. What should be added?', options: ['A larger font', 'Structured logs and inspectable artifacts', 'More randomness', 'A second hidden prompt'], answer: 1, explanation: 'Traceable artifacts make decisions reviewable.' },
+    { skill: 'Evaluation', question: 'If an answer is clever but fails the tests, what should you do?', options: ['Pass it anyway', 'Fail it', 'Ignore the tests', 'Ask the agent to sound more confident'], answer: 1, explanation: 'Tests and checks outrank style.' },
+    { skill: 'Evaluation', question: 'Why tune instructions, context, and policy before switching models?', options: ['Because models never matter', 'Because workflow issues often live outside the model', 'Because changing models is forbidden', 'Because evaluation is unnecessary'], answer: 1, explanation: 'Many quality problems are caused by workflow design, not just the model.' },
+    { skill: 'Evaluation', question: 'What should a good agent evaluation include?', options: ['Only subjective impression', 'Tests, security checks, and success criteria', 'A random seed and no rubric', 'Just the prompt text'], answer: 1, explanation: 'Evaluation must combine correctness and safety signals.' },
+    { skill: 'Evaluation', question: 'A proposed plan has no rollback strategy. What is the best response?', options: ['Approve it because it is detailed', 'Reject or revise it until rollback is included', 'Skip validation', 'Merge it in draft'], answer: 1, explanation: 'Rollback is a required control for risky changes.' },
+    { skill: 'Evaluation', question: 'How should agent output be benchmarked over time?', options: ['Use different rubrics every run', 'Compare against the same rubric and criteria', 'Ignore prior results', 'Only judge by word count'], answer: 1, explanation: 'Consistent rubrics make improvement measurable.' },
+    { skill: 'Evaluation', question: 'What is the best way to judge if an agent is ready for production?', options: ['It feels ready', 'It has no errors in the prompt', 'It repeatedly meets metrics, passes checks, and stays within scope', 'It uses the longest context window'], answer: 2, explanation: 'Production readiness is evidence-based.' },
+    { skill: 'Evaluation', question: 'When should detailed reasoning traces be retained?', options: ['Never', 'Only when they help audit or debug a decision', 'Always in raw form', 'Only if they are funny'], answer: 1, explanation: 'Keep the traces that support audit and debugging.' },
+
+    { skill: 'Coordination', question: 'A workflow needs one agent to analyze code, another to propose edits, and a third to validate results. What orchestration pattern is this?', options: ['Sequential pipeline', 'Broadcast-only chat', 'Single-agent loop', 'Random walk'], answer: 0, explanation: 'Analyze, propose, then validate is a sequential workflow.' },
+    { skill: 'Coordination', question: 'Two agents are changing the same file. What is the best control?', options: ['Let both agents write and resolve conflicts later', 'Add conflict detection and resource locks', 'Disable checkpoints', 'Ignore the conflict if both are confident'], answer: 1, explanation: 'Locks and conflict detection prevent contradictory edits.' },
+    { skill: 'Coordination', question: 'Why should multi-agent work use explicit handoffs?', options: ['To make the output longer', 'To keep ownership clear and reduce overlap', 'To remove auditability', 'To avoid validation'], answer: 1, explanation: 'Clear handoffs reduce confusion and duplication.' },
+    { skill: 'Coordination', question: 'What should happen when agent responsibilities overlap?', options: ['Let both work on everything', 'Define ownership and lock scope', 'Remove one agent permanently', 'Ignore the overlap'], answer: 1, explanation: 'Ownership boundaries are required for coordination.' },
+    { skill: 'Coordination', question: 'Which is a better choice than broadcast-only chat for a multi-agent workflow?', options: ['Structured stateful handoffs', 'More random messages', 'No shared artifacts', 'Hidden prompts'], answer: 0, explanation: 'Structured handoffs are easier to review and control.' },
+    { skill: 'Coordination', question: 'When should coordination outrank raw speed?', options: ['Never', 'Always for high-risk edits', 'Only on weekends', 'Only if the agent is verbose'], answer: 1, explanation: 'Coordination matters more than speed when changes are risky.' },
+    { skill: 'Coordination', question: 'How should an agent team recover when one agent cannot see what the other did?', options: ['Guess', 'Store shared logs and artifacts', 'Delete the second agent', 'Ignore the mismatch'], answer: 1, explanation: 'Shared artifacts provide continuity.' },
+    { skill: 'Coordination', question: 'What is the best safeguard for interdependent tasks?', options: ['No planning', 'Defined dependencies and approval gates', 'Unlimited parallel execution', 'No review'], answer: 1, explanation: 'Dependencies and gates prevent collisions.' },
+    { skill: 'Coordination', question: 'What makes a multi-agent workflow auditable?', options: ['Only the final result', 'A clear sequence of artifacts and decisions', 'More hidden prompts', 'No logs'], answer: 1, explanation: 'Audits need a decision trail, not just the outcome.' },
+    { skill: 'Coordination', question: 'If one agent is enough to validate a risky change, should the second validator be removed?', options: ['Yes, always', 'No, a separate validator reduces blind spots', 'Only if time is short', 'Only if the validator is slower'], answer: 1, explanation: 'Independent validation improves safety.' },
+
+    { skill: 'Guardrails', question: 'A question asks how to reduce risk when an agent handles high-impact changes. Which is the best option?', options: ['Remove human review to keep the workflow fast', 'Use least privilege, explicit approvals, and rollback paths', 'Let the agent decide when the change is too risky', 'Disable telemetry so nobody gets confused'], answer: 1, explanation: 'Least privilege and approval gates are the safest answer.' },
+    { skill: 'Guardrails', question: 'Which is the best example of a guardrail?', options: ['Letting the agent use any tool available', 'Blocking secrets from code and requiring code-owner review for sensitive files', 'Increasing token limits', 'Allowing every action to auto-merge'], answer: 1, explanation: 'Policy and review gates are guardrails.' },
+    { skill: 'Guardrails', question: 'What is the safest answer for a draft PR created by an agent but not merged?', options: ['Fully autonomous merge', 'Manual-only with no agent output', 'Scoped with approval', 'No audit trail'], answer: 2, explanation: 'Draft PR creation with approval is scoped autonomy.' },
+    { skill: 'Guardrails', question: 'Why should observability remain enabled even when it adds overhead?', options: ['It looks professional', 'It supports review, debugging, and accountability', 'It removes the need for controls', 'It makes agents self-aware'], answer: 1, explanation: 'Observability is required for safe operations.' },
+    { skill: 'Guardrails', question: 'How should logs handle sensitive information?', options: ['Store secrets in clear text', 'Redact secrets and sensitive content', 'Delete all logs', 'Copy them into the prompt'], answer: 1, explanation: 'Sensitive data must be redacted.' },
+    { skill: 'Guardrails', question: 'What should happen if an agent is asked to touch authentication logic?', options: ['Allow full autonomy because it is urgent', 'Require human approval and a high-friction review path', 'Skip review because tests are enough', 'Ask the agent to self-sign the change'], answer: 1, explanation: 'Auth changes are high impact and need approval.' },
+    { skill: 'Guardrails', question: 'Which autonomy choice is safest for production?', options: ['Maximum autonomy with no guardrails', 'Scoped tools, clear approvals, logs, and rollback paths', 'No validation', 'Hidden review'], answer: 1, explanation: 'This is the safe production pattern.' },
+    { skill: 'Guardrails', question: 'What should an agent do if it cannot prove a risky change is safe?', options: ['Proceed anyway', 'Escalate to a human and stop', 'Self-certify', 'Ignore the issue'], answer: 1, explanation: 'Escalation is the right move when safety cannot be proven.' },
+    { skill: 'Guardrails', question: 'Why is human-in-the-loop still necessary for some workflows?', options: ['Humans are slower', 'It provides accountability and final judgment on risk', 'It makes logs unnecessary', 'It removes the need for testing'], answer: 1, explanation: 'Human judgment is required for high-risk decisions.' },
+    { skill: 'Guardrails', question: 'What is the most important exam answer when a risky change needs to be shipped quickly?', options: ['Ship first, validate later', 'Use guardrails, approvals, and rollback even if slower', 'Ask the model to be more confident', 'Disable policy checks'], answer: 1, explanation: 'The safer answer is usually the better exam answer.' }
+  ];
+
+  const PASS_SCORE = 51;
+  const STORAGE_KEY = 'gh600-native-mock-exam-v1';
+  const skillOrder = ['Planning', 'Tools', 'Memory', 'Evaluation', 'Coordination', 'Guardrails'];
+
+  const questionContainer = document.getElementById('questions');
+  const progressFill = document.getElementById('progressFill');
+  const progressLabel = document.getElementById('progressLabel');
+  const timerEl = document.getElementById('timer');
+  const answeredCountEl = document.getElementById('answeredCount');
+  const scoreCountEl = document.getElementById('scoreCount');
+  const statusTextEl = document.getElementById('statusText');
+  const finalScoreEl = document.getElementById('finalScore');
+  const passMessageEl = document.getElementById('passMessage');
+  const reviewSummaryEl = document.getElementById('reviewSummary');
+  const skillBreakdownEl = document.getElementById('skillBreakdown');
+  const reviewCardsEl = document.getElementById('reviewCards');
+  const resultsPanel = document.getElementById('resultsPanel');
+  const startBtn = document.getElementById('startBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const examModeBtn = document.getElementById('examModeBtn');
+  const studyModeBtn = document.getElementById('studyModeBtn');
+  const flashModeBtn = document.getElementById('flashModeBtn');
+  const examModeView = document.getElementById('examModeView');
+  const studyModeView = document.getElementById('studyModeView');
+  const flashModeView = document.getElementById('flashModeView');
+  const studySkill = document.getElementById('studySkill');
+  const studyPrompt = document.getElementById('studyPrompt');
+  const studyOptions = document.getElementById('studyOptions');
+  const studyFeedback = document.getElementById('studyFeedback');
+  const studyCounter = document.getElementById('studyCounter');
+  const studyStatus = document.getElementById('studyStatus');
+  const studyPrevBtn = document.getElementById('studyPrevBtn');
+  const studyNextBtn = document.getElementById('studyNextBtn');
+  const studyRandomBtn = document.getElementById('studyRandomBtn');
+  const flashFaceLabel = document.getElementById('flashFaceLabel');
+  const flashFront = document.getElementById('flashFront');
+  const flashBack = document.getElementById('flashBack');
+  const flashCounter = document.getElementById('flashCounter');
+  const flashSkill = document.getElementById('flashSkill');
+  const flashPrevBtn = document.getElementById('flashPrevBtn');
+  const flashFlipBtn = document.getElementById('flashFlipBtn');
+  const flashNextBtn = document.getElementById('flashNextBtn');
+  const flashShuffleBtn = document.getElementById('flashShuffleBtn');
+  const readAloudToggleBtn = document.getElementById('readAloudToggleBtn');
+  const studyReadBtn = document.getElementById('studyReadBtn');
+  const studyStopReadBtn = document.getElementById('studyStopReadBtn');
+  const flashReadBtn = document.getElementById('flashReadBtn');
+  const flashStopReadBtn = document.getElementById('flashStopReadBtn');
+
+  let timerId = null;
+  let remainingSeconds = 60 * 60;
+  let started = false;
+  let submitted = false;
+  let selections = new Array(QUESTIONS.length).fill(null);
+  let currentMode = 'exam';
+  let studyIndex = 0;
+  let studyAnswered = false;
+  let flashDeck = Array.from({ length: QUESTIONS.length }, (_, index) => index);
+  let flashPosition = 0;
+  let flashFlipped = false;
+  let readAloudEnabled = false;
+  const canSpeak = typeof window !== 'undefined' && 'speechSynthesis' in window;
+
+  function formatTime(totalSeconds) {
+    const mins = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+    const secs = String(totalSeconds % 60).padStart(2, '0');
+    return `${mins}:${secs}`;
+  }
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ selections, remainingSeconds, started, submitted }));
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (Array.isArray(saved.selections) && saved.selections.length === QUESTIONS.length) {
+        selections = saved.selections;
+      }
+      if (typeof saved.remainingSeconds === 'number' && saved.remainingSeconds > 0) {
+        remainingSeconds = saved.remainingSeconds;
+      }
+      started = Boolean(saved.started);
+      submitted = Boolean(saved.submitted);
+    } catch (error) {
+      console.warn('Could not load saved exam state:', error);
+    }
+  }
+
+  function updateProgress() {
+    const answered = selections.filter((value) => value !== null && value !== undefined).length;
+    const percentage = (answered / QUESTIONS.length) * 100;
+    progressFill.style.width = `${percentage}%`;
+    progressLabel.textContent = `${answered} of ${QUESTIONS.length} answered`;
+    answeredCountEl.textContent = `${answered}/${QUESTIONS.length}`;
+    saveState();
+  }
+
+  function setMode(mode) {
+    currentMode = mode;
+    stopSpeech();
+    examModeView.classList.toggle('hidden', mode !== 'exam');
+    studyModeView.classList.toggle('hidden', mode !== 'study');
+    flashModeView.classList.toggle('hidden', mode !== 'flash');
+    examModeBtn.classList.toggle('active', mode === 'exam');
+    studyModeBtn.classList.toggle('active', mode === 'study');
+    flashModeBtn.classList.toggle('active', mode === 'flash');
+  }
+
+  function stopSpeech() {
+    if (!canSpeak) return;
+    window.speechSynthesis.cancel();
+  }
+
+  function speakText(text) {
+    if (!canSpeak || !text) return;
+    stopSpeech();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function updateReadAloudControls() {
+    if (!canSpeak) {
+      readAloudToggleBtn.textContent = 'Read Aloud: Unsupported';
+      readAloudToggleBtn.disabled = true;
+      studyReadBtn.disabled = true;
+      studyStopReadBtn.disabled = true;
+      flashReadBtn.disabled = true;
+      flashStopReadBtn.disabled = true;
+      return;
+    }
+
+    readAloudToggleBtn.disabled = false;
+    readAloudToggleBtn.textContent = readAloudEnabled ? 'Read Aloud: On' : 'Read Aloud: Off';
+    readAloudToggleBtn.classList.toggle('active', readAloudEnabled);
+  }
+
+  function readCurrentStudyQuestion() {
+    const q = QUESTIONS[studyIndex];
+    const answers = q.options.map((option, idx) => `${String.fromCharCode(65 + idx)}. ${option}`).join('. ');
+    speakText(`Skill: ${q.skill}. Question ${studyIndex + 1}. ${q.question}. Options: ${answers}`);
+  }
+
+  function readCurrentFlashCard() {
+    const qIndex = flashDeck[flashPosition];
+    const q = QUESTIONS[qIndex];
+    if (flashFlipped) {
+      speakText(`Answer. Correct option ${String.fromCharCode(65 + q.answer)}. ${q.options[q.answer]}. ${q.explanation}`);
+      return;
+    }
+    speakText(`Flash card question. ${q.question}`);
+  }
+
+  function renderStudyQuestion() {
+    const q = QUESTIONS[studyIndex];
+    studySkill.textContent = q.skill;
+    studyPrompt.textContent = `${studyIndex + 1}. ${q.question}`;
+    studyCounter.textContent = `Question ${studyIndex + 1}/${QUESTIONS.length}`;
+    studyStatus.textContent = 'Study Mode gives immediate correct/incorrect feedback after each answer.';
+    studyFeedback.className = 'study-feedback tiny muted';
+    studyFeedback.textContent = 'Pick an answer to get instant feedback and rationale.';
+    studyAnswered = false;
+
+    studyOptions.innerHTML = q.options.map((option, optionIndex) => {
+      return `<button class="answer-btn" data-choice="${optionIndex}"><strong>${String.fromCharCode(65 + optionIndex)}.</strong> ${option}</button>`;
+    }).join('');
+
+    studyOptions.querySelectorAll('.answer-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (studyAnswered) return;
+        const chosen = Number(btn.getAttribute('data-choice'));
+        const correct = q.answer;
+        studyAnswered = true;
+        studyOptions.querySelectorAll('.answer-btn').forEach((optionBtn) => {
+          const optionIndex = Number(optionBtn.getAttribute('data-choice'));
+          if (optionIndex === correct) {
+            optionBtn.classList.add('correct');
+          }
+          if (optionIndex === chosen && chosen !== correct) {
+            optionBtn.classList.add('wrong');
+          }
+          optionBtn.disabled = true;
+        });
+
+        if (chosen === correct) {
+          studyFeedback.className = 'study-feedback tiny';
+          studyFeedback.style.color = 'var(--good)';
+          studyFeedback.innerHTML = `<strong>Correct.</strong> ${q.explanation}`;
+        } else {
+          studyFeedback.className = 'study-feedback tiny';
+          studyFeedback.style.color = 'var(--bad)';
+          studyFeedback.innerHTML = `<strong>Not quite.</strong> Correct answer: ${String.fromCharCode(65 + correct)}. ${q.options[correct]}<br>${q.explanation}`;
+        }
+      });
+    });
+
+    if (readAloudEnabled && currentMode === 'study') {
+      readCurrentStudyQuestion();
+    }
+  }
+
+  function renderFlashCard() {
+    const qIndex = flashDeck[flashPosition];
+    const q = QUESTIONS[qIndex];
+    flashCounter.textContent = `Card ${flashPosition + 1}/${flashDeck.length}`;
+    flashSkill.textContent = `Skill: ${q.skill}`;
+    flashFront.textContent = q.question;
+    flashBack.innerHTML = `<strong>Correct:</strong> ${String.fromCharCode(65 + q.answer)}. ${q.options[q.answer]}<br><strong>Why:</strong> ${q.explanation}`;
+
+    if (flashFlipped) {
+      flashFaceLabel.textContent = 'Answer';
+      flashBack.classList.remove('hidden');
+    } else {
+      flashFaceLabel.textContent = 'Question';
+      flashBack.classList.add('hidden');
+    }
+
+    if (readAloudEnabled && currentMode === 'flash') {
+      readCurrentFlashCard();
+    }
+  }
+
+  function nextStudy(step) {
+    studyIndex = (studyIndex + step + QUESTIONS.length) % QUESTIONS.length;
+    renderStudyQuestion();
+  }
+
+  function nextFlash(step) {
+    flashPosition = (flashPosition + step + flashDeck.length) % flashDeck.length;
+    flashFlipped = false;
+    renderFlashCard();
+  }
+
+  function shuffleFlashDeck() {
+    for (let i = flashDeck.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [flashDeck[i], flashDeck[j]] = [flashDeck[j], flashDeck[i]];
+    }
+    flashPosition = 0;
+    flashFlipped = false;
+    renderFlashCard();
+  }
+
+  function renderQuestions() {
+    questionContainer.innerHTML = QUESTIONS.map((q, index) => {
+      const options = q.options.map((option, optionIndex) => {
+        const checked = selections[index] === optionIndex ? 'checked' : '';
+        return `
+          <label class="option">
+            <input type="radio" name="q${index}" value="${optionIndex}" ${checked} ${submitted ? 'disabled' : ''}>
+            <span><strong>${String.fromCharCode(65 + optionIndex)}.</strong> ${option}</span>
+          </label>
+        `;
+      }).join('');
+
+      return `
+        <article class="question" data-question="${index}">
+          <div class="skill-tag">${q.skill}</div>
+          <h2>${index + 1}. ${q.question}</h2>
+          <div class="options">${options}</div>
+        </article>
+      `;
+    }).join('');
+
+    questionContainer.querySelectorAll('input[type="radio"]').forEach((input) => {
+      input.addEventListener('change', (event) => {
+        const questionIndex = Number(event.target.name.slice(1));
+        selections[questionIndex] = Number(event.target.value);
+        updateProgress();
+        if (!started && !submitted) {
+          beginExam();
+        }
+      });
+    });
+  }
+
+  function beginExam() {
+    if (started || submitted) return;
+    started = true;
+    statusTextEl.textContent = 'Running';
+    startBtn.textContent = 'Exam Running';
+    startBtn.disabled = true;
+    timerId = setInterval(() => {
+      remainingSeconds -= 1;
+      timerEl.textContent = formatTime(Math.max(remainingSeconds, 0));
+      saveState();
+      if (remainingSeconds <= 0) {
+        clearInterval(timerId);
+        submitExam(true);
+      }
+    }, 1000);
+    saveState();
+  }
+
+  function submitExam(auto = false) {
+    if (submitted) return;
+    submitted = true;
+    clearInterval(timerId);
+    statusTextEl.textContent = auto ? 'Time expired' : 'Scored';
+    startBtn.disabled = true;
+    submitBtn.disabled = true;
+
+    let correct = 0;
+    const skillTotals = Object.fromEntries(skillOrder.map((skill) => [skill, { correct: 0, total: 0 }]));
+
+    QUESTIONS.forEach((q, index) => {
+      skillTotals[q.skill].total += 1;
+      if (selections[index] === q.answer) {
+        correct += 1;
+        skillTotals[q.skill].correct += 1;
+      }
+    });
+
+    const missed = QUESTIONS.length - correct;
+    const passed = correct >= PASS_SCORE;
+    const scoreText = `${correct}/${QUESTIONS.length}`;
+
+    scoreCountEl.textContent = scoreText;
+    finalScoreEl.textContent = `Score: ${scoreText}`;
+    passMessageEl.textContent = passed
+      ? `Pass. You cleared the ${PASS_SCORE}/60 threshold.`
+      : `Fail. You need at least ${PASS_SCORE}/60 to pass this drill.`;
+    passMessageEl.style.color = passed ? 'var(--good)' : 'var(--bad)';
+    reviewSummaryEl.textContent = `${correct} correct, ${missed} missed. Correct answers are now shown below.`;
+    resultsPanel.classList.remove('hidden');
+
+    skillBreakdownEl.innerHTML = skillOrder.map((skill) => {
+      const row = skillTotals[skill];
+      const percent = row.total ? Math.round((row.correct / row.total) * 100) : 0;
+      return `
+        <div>
+          <div class="skill-row"><span>${skill}</span><strong>${row.correct}/${row.total}</strong></div>
+          <div class="bar"><div style="width:${percent}%"></div></div>
+        </div>
+      `;
+    }).join('');
+
+    reviewCardsEl.innerHTML = QUESTIONS.map((q, index) => {
+      const selected = selections[index];
+      const chosenText = selected === null || selected === undefined ? 'No answer chosen' : `${String.fromCharCode(65 + selected)}. ${q.options[selected]}`;
+      const correctText = `${String.fromCharCode(65 + q.answer)}. ${q.options[q.answer]}`;
+      return `
+        <article class="review-card">
+          <h3 class="review-title">${index + 1}. ${q.question}</h3>
+          <div class="tiny muted">Skill: ${q.skill}</div>
+          <p class="tiny"><strong>Your answer:</strong> ${chosenText}</p>
+          <p class="tiny"><strong>Correct answer:</strong> ${correctText}</p>
+          <p class="tiny"><strong>Why:</strong> ${q.explanation}</p>
+        </article>
+      `;
+    }).join('');
+
+    document.querySelectorAll('.question').forEach((questionEl, index) => {
+      const radios = questionEl.querySelectorAll('input[type="radio"]');
+      radios.forEach((radio) => {
+        radio.disabled = true;
+        const optionWrap = radio.closest('.option');
+        const optionIndex = Number(radio.value);
+        if (optionIndex === QUESTIONS[index].answer) {
+          optionWrap.classList.add('correct');
+        }
+        if (selections[index] !== null && optionIndex === selections[index] && selections[index] !== QUESTIONS[index].answer) {
+          optionWrap.classList.add('wrong');
+        }
+      });
+    });
+
+    saveState();
+  }
+
+  function resetExam() {
+    clearInterval(timerId);
+    remainingSeconds = 60 * 60;
+    started = false;
+    submitted = false;
+    selections = new Array(QUESTIONS.length).fill(null);
+    questionContainer.innerHTML = '';
+    reviewCardsEl.innerHTML = '';
+    skillBreakdownEl.innerHTML = '';
+    reviewSummaryEl.textContent = 'No answers scored yet.';
+    resultsPanel.classList.add('hidden');
+    timerEl.textContent = formatTime(remainingSeconds);
+    scoreCountEl.textContent = '--';
+    finalScoreEl.textContent = 'Score: --';
+    passMessageEl.textContent = 'Submit the exam to score it and reveal the correct answers.';
+    passMessageEl.style.color = 'var(--muted)';
+    statusTextEl.textContent = 'Ready';
+    startBtn.disabled = false;
+    startBtn.textContent = 'Start Exam';
+    submitBtn.disabled = false;
+    renderQuestions();
+    updateProgress();
+    localStorage.removeItem(STORAGE_KEY);
+  }
+
+  startBtn.addEventListener('click', () => {
+    beginExam();
+  });
+
+  submitBtn.addEventListener('click', () => {
+    if (!started) beginExam();
+    submitExam(false);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    resetExam();
+  });
+
+  examModeBtn.addEventListener('click', () => setMode('exam'));
+  studyModeBtn.addEventListener('click', () => setMode('study'));
+  flashModeBtn.addEventListener('click', () => setMode('flash'));
+
+  studyPrevBtn.addEventListener('click', () => nextStudy(-1));
+  studyNextBtn.addEventListener('click', () => nextStudy(1));
+  studyRandomBtn.addEventListener('click', () => {
+    studyIndex = Math.floor(Math.random() * QUESTIONS.length);
+    renderStudyQuestion();
+  });
+
+  flashPrevBtn.addEventListener('click', () => nextFlash(-1));
+  flashNextBtn.addEventListener('click', () => nextFlash(1));
+  flashFlipBtn.addEventListener('click', () => {
+    flashFlipped = !flashFlipped;
+    renderFlashCard();
+  });
+  flashShuffleBtn.addEventListener('click', () => shuffleFlashDeck());
+  readAloudToggleBtn.addEventListener('click', () => {
+    if (!canSpeak) return;
+    readAloudEnabled = !readAloudEnabled;
+    updateReadAloudControls();
+    if (!readAloudEnabled) {
+      stopSpeech();
+      return;
+    }
+    if (currentMode === 'study') {
+      readCurrentStudyQuestion();
+    } else if (currentMode === 'flash') {
+      readCurrentFlashCard();
+    }
+  });
+  studyReadBtn.addEventListener('click', () => readCurrentStudyQuestion());
+  studyStopReadBtn.addEventListener('click', () => stopSpeech());
+  flashReadBtn.addEventListener('click', () => readCurrentFlashCard());
+  flashStopReadBtn.addEventListener('click', () => stopSpeech());
+
+  document.addEventListener('keydown', (event) => {
+    const activeTag = document.activeElement && document.activeElement.tagName;
+    if (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT') return;
+
+    if (currentMode === 'study') {
+      if (event.key >= '1' && event.key <= '4') {
+        const choice = Number(event.key) - 1;
+        const btn = studyOptions.querySelector(`.answer-btn[data-choice="${choice}"]`);
+        if (btn && !btn.disabled) btn.click();
+      }
+      if (event.key === 'ArrowRight') {
+        nextStudy(1);
+      }
+      if (event.key === 'ArrowLeft') {
+        nextStudy(-1);
+      }
+      if (event.key.toLowerCase() === 'r') {
+        studyIndex = Math.floor(Math.random() * QUESTIONS.length);
+        renderStudyQuestion();
+      }
+    }
+
+    if (currentMode === 'flash') {
+      if (event.key === 'ArrowRight') {
+        nextFlash(1);
+      }
+      if (event.key === 'ArrowLeft') {
+        nextFlash(-1);
+      }
+      if (event.code === 'Space') {
+        event.preventDefault();
+        flashFlipped = !flashFlipped;
+        renderFlashCard();
+      }
+      if (event.key.toLowerCase() === 's') {
+        shuffleFlashDeck();
+      }
+    }
+  });
+
+  loadState();
+  renderQuestions();
+  updateProgress();
+  renderStudyQuestion();
+  renderFlashCard();
+  updateReadAloudControls();
+  setMode(currentMode);
+  timerEl.textContent = formatTime(remainingSeconds);
+
+  if (started && !submitted) {
+    startBtn.disabled = true;
+    startBtn.textContent = 'Exam Running';
+    statusTextEl.textContent = 'Running';
+    timerId = setInterval(() => {
+      remainingSeconds -= 1;
+      timerEl.textContent = formatTime(Math.max(remainingSeconds, 0));
+      saveState();
+      if (remainingSeconds <= 0) {
+        clearInterval(timerId);
+        submitExam(true);
+      }
+    }, 1000);
+  }
+})();
+</script>

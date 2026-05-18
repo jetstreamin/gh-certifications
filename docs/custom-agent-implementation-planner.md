@@ -931,9 +931,11 @@ Prompt 3: "Create project management plan with milestones"
 
 ## Additional Resources
 
-- **Custom Agents Documentation:** https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/create-custom-agents
-- **Custom Agents Configuration:** https://docs.github.com/en/copilot/reference/custom-agents-configuration
-- **About Custom Agents:** https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-custom-agents
+- **Custom Agents Documentation:** https://docs.github.com/en/copilot/how-tos/copilot-sdk/use-copilot-sdk/custom-agents
+- **Defining Custom Agents:** https://docs.github.com/en/copilot/how-tos/copilot-sdk/use-copilot-sdk/custom-agents#defining-custom-agents
+- **Configuration Reference:** https://docs.github.com/en/copilot/how-tos/copilot-sdk/use-copilot-sdk/custom-agents#configuration-reference
+- **How Sub-Agent Delegation Works:** https://docs.github.com/en/copilot/how-tos/copilot-sdk/use-copilot-sdk/custom-agents#how-sub-agent-delegation-works
+- **About Custom Agents:** https://docs.github.com/en/copilot/how-tos/copilot-sdk/use-copilot-sdk/custom-agents
 - **Copilot Cloud Agent:** https://docs.github.com/en/copilot/agents/copilot-cloud-agent
 - **Awesome GitHub Copilot Customizations:** https://github.com/github/awesome-copilot/tree/main/agents
 

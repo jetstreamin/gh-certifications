@@ -6,11 +6,17 @@ description: Comprehensive guide to building custom agents with the Copilot SDK,
 
 # Copilot SDK: Custom Agents Implementation Guide
 
-**Status:** Public Preview | **Last Updated:** May 2026 | **Applies to:** Copilot SDK v1.0+
+**Status:** Public Preview | **Last Updated:** May 2026 | **Applies to:** Copilot SDK across all Copilot plans
 
 ## Overview
 
 The Copilot SDK enables you to define **custom agents** with specialized system prompts, tool restrictions, and optional Model Context Protocol (MCP) servers. The SDK runtime automatically delegates user requests to the most appropriate agent (sub-agent) based on intent matching, running each agent in an isolated context while streaming lifecycle events back to the parent session.
+
+### Who Can Use This Feature?
+
+- Available with all Copilot plans
+- Feature is currently in public preview
+- Custom agents are attached to a session at creation time
 
 ### Key Concepts
 

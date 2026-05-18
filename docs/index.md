@@ -4,7 +4,7 @@ title: GitHub Certifications - Learning Hub
 description: Comprehensive learning hub for GitHub Certifications including GH-600 Agentic AI Developer, Copilot Custom Agents, and CodeQL.
 ---
 
-# GitHub Certifications Learning Hub
+## GitHub Certifications Learning Hub
 
 Welcome to the GitHub Certifications learning repository. This resource documents key concepts, best practices, and step-by-step guides for GitHub's security and advanced topics certifications.
 
@@ -20,6 +20,22 @@ Welcome to the GitHub Certifications learning repository. This resource document
   - Orchestrate multi-agent coordination
   - Implement guardrails and accountability
 
+- **[GH-600 Hard Practice Tests](./gh-600-practice-tests.md)** — Two difficult practice tests with answer keys and a fast-pass checklist.
+  - Hard-mode scenario questions
+  - Detailed answer explanations
+  - Score bands and review targets
+  - Exam-ready fast-pass checklist
+
+- **[GH-600 Native Mock Exam](./gh-600-native-mock-exam.html)** — Native browser mock exam with timer, scoring, study mode, flash cards, keyboard shortcuts, read-aloud mode, answer reveal, and skill breakdown.
+  - 60-question timed run
+  - Automatic pass/fail scoring
+  - Study mode with instant feedback
+  - Flash cards with shuffle and flip
+  - Keyboard-first controls
+  - Read-aloud support (browser speech)
+  - Correct-answer reveal with rationale
+  - Per-skill performance breakdown
+
 ### Copilot Custom Agents: Administration, SDK, Memory & Tutorials
 
 - **[Custom Agents Admin Guide](./custom-agents-admin-guide.md)** — Complete guide for organization owners setting up and managing custom Copilot agents. Covers repository setup, agent lifecycle, compliance, and governance.
@@ -28,6 +44,20 @@ Welcome to the GitHub Certifications learning repository. This resource document
   - Compliance and security requirements
   - Tools management and permissions
   - Monitoring and metrics
+
+- **[Cloud Agent Guardrails](./cloud-agent-guardrails.md)** — Tutorial for setting up policy, ruleset, and Actions guardrails for GitHub Copilot cloud agent.
+  - Enterprise and organization policy planning
+  - Ruleset and CODEOWNERS protections
+  - GitHub Actions secrets, runners, and permissions
+  - Workflow approval behavior
+  - Readiness checklist
+
+- **[Cloud Agent Risks and Mitigations](./cloud-agent-risks-mitigations.md)** — Practical summary of cloud-agent risks and built-in mitigations.
+  - Unvalidated code and vulnerability controls
+  - Repository write and branch protections
+  - Sensitive data and prompt-injection defenses
+  - Auditability and traceability
+  - Quick mitigation checklist
 
 - **[Copilot SDK: Custom Agents Implementation](./copilot-sdk-custom-agents.md)** — Developer guide for building custom agents with the Copilot SDK. Covers configuration, sub-agent orchestration, event handling, and production patterns.
   - Agent configuration and properties
@@ -61,8 +91,8 @@ Welcome to the GitHub Certifications learning repository. This resource document
 
 ## 🎯 Certification Paths
 
-- **GH-600: GitHub Agentic AI Developer** — Complete (1 guide)
-- **GitHub Agent Development** — Complete (3 guides)
+- **GH-600: GitHub Agentic AI Developer** — Complete (3 guides)
+- **GitHub Agent Development** — Complete (7 guides)
 - **GitHub Security & Code Scanning** — In progress
 - Additional paths coming soon...
 
@@ -86,4 +116,4 @@ Welcome to the GitHub Certifications learning repository. This resource document
 
 ---
 
-**Last Updated:** May 18, 2026 | **Total Guides:** 9 | **Total Content:** 40,000+ lines
+**Last Updated:** May 18, 2026 | **Total Guides:** 11 | **Total Content:** 40,000+ lines

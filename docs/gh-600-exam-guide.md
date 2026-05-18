@@ -1,3 +1,4 @@
+<!-- markdownlint-disable-file -->
 # GH-600 Exam Study Guide: Developing in Agentic AI Systems
 
 > **Exam:** Microsoft Certified: GitHub Agentic AI Developer  
@@ -1106,6 +1107,50 @@ class PermissionEnforcer:
         self.audit_log(agent_id, action, resource, "granted")
         return True, "permitted"
 ```
+
+---
+
+## First-Try Prep Feature: 3-Day Cram Plan
+
+Use this when you want the guide to function as an exam-ready feature, not just reference material.
+
+### Day 1: Core Concepts
+
+- Read the full guide once end to end.
+- Focus on agent architecture, SDLC integration, tool use, memory/state, evaluation, multi-agent coordination, and guardrails.
+- Write a one-page summary for each skill area.
+- For each area, answer: what it is, why it matters, what can go wrong, and how to control it.
+
+### Day 2: Scenario Practice
+
+- Do 6 to 10 timed scenarios.
+- Force yourself to choose between safety, speed, approval, observability, and least privilege.
+- Practice explaining tradeoffs out loud in 60 seconds or less.
+- Revisit the sections on planning vs. action, observability, error recovery, tuning, orchestration, and guardrails.
+
+### Day 3: Final Pass
+
+- Take a full mock run with no notes for 60 minutes.
+- Mark every question you were unsure about and review only those topics.
+- Memorize the recurring exam patterns: human-in-the-loop for risky actions, explicit approvals for high-impact changes, scoped tools, logs and traceability, and separate planning from execution.
+- Do a final skim of your one-page summaries.
+
+### Last-Hour Checklist
+
+- Can you explain autonomy levels?
+- Can you pick the right tool scope?
+- Can you decide when to escalate to a human?
+- Can you describe how to recover from agent failure?
+- Can you justify observability and audit requirements?
+
+---
+
+## Hard Practice Tests
+
+Use the dedicated hard-mode practice tests to pressure-test your readiness before you spend money on the exam.
+
+- [GH-600 Hard Practice Tests](./gh-600-practice-tests.md) - Two difficult practice exams with answer keys, scoring guidance, and a fast-pass checklist.
+- [GH-600 Native Mock Exam](./gh-600-native-mock-exam.html) - Native browser exam mode with 60 timed questions, automatic scoring, study mode, flash cards, keyboard shortcuts, read-aloud mode, and answer reveal with explanations.
 
 ---
 
