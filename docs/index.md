@@ -13,7 +13,7 @@ The landing page is now organized by outcome: pass GH-600, build safe custom age
 <iframe
   src="./gh-600-training-game.html"
   title="GH-600 Training Game"
-  style="width: 100%; height: 1120px; border: 0; border-radius: 12px; background: transparent;"
+  style="width: 100%; height: 1400px; border: 0; border-radius: 12px; background: transparent;"
   loading="lazy"
 ></iframe>
 
