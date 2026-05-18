@@ -430,6 +430,9 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   const ROWS = 20;
   const BLOCK = 34;
   const START_LIVES = 3;
+  const BASE_DROP_MS = 1200;
+  const LEVEL_STEP_MS = 70;
+  const MIN_DROP_MS = 320;
   const STATE_KEY = 'gh600-drop-drill-scoreboard-v1';
   const THEME_KEY = 'gh600-drop-drill-theme-v1';
 
@@ -465,10 +468,10 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
 
   const CONTROLS = [
     'Start / Pause / Restart buttons',
-    'Answer: keys 1-4 or click answer options',
-    'Move piece: Left / Right arrows (only if current answer is correct)',
-    'Soft drop: Down arrow',
-    'Rotate: Up arrow (only if current answer is correct)',
+    'Answer: keys 1-4 (top row or numpad) or click answer options',
+    'Move piece: Left / Right arrows or A / D (only if current answer is correct)',
+    'Soft drop: Down arrow or S',
+    'Rotate: Up arrow or W (only if current answer is correct)',
     'Read question: R, stop reading: X'
   ];
 
@@ -762,7 +765,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   }
 
   function dropIntervalMs() {
-    return Math.max(140, 760 - (level - 1) * 55);
+    return Math.max(MIN_DROP_MS, BASE_DROP_MS - (level - 1) * LEVEL_STEP_MS);
   }
 
   function tick(timestamp) {
@@ -971,42 +974,59 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     zonesEl.innerHTML = ZONES.map((z, i) => `<div class="zone" data-zone="${i}">${z.label} zone</div>`).join('');
   }
 
+  function normalizeKey(event) {
+    const codeMap = {
+      Numpad1: '1',
+      Numpad2: '2',
+      Numpad3: '3',
+      Numpad4: '4',
+      KeyA: 'ArrowLeft',
+      KeyD: 'ArrowRight',
+      KeyW: 'ArrowUp',
+      KeyS: 'ArrowDown',
+      Space: ' '
+    };
+    return codeMap[event.code] || event.key;
+  }
+
   function handleKey(event) {
+    const key = normalizeKey(event);
     const navKeys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' ', 'Spacebar'];
     const answerKeys = ['1', '2', '3', '4'];
-    if (navKeys.includes(event.key) || answerKeys.includes(event.key)) {
+    if (navKeys.includes(key) || answerKeys.includes(key)) {
       event.preventDefault();
+      event.stopPropagation();
     }
 
     if (!gameRunning || paused || gameOver || !currentPiece) return;
 
-    if (event.key >= '1' && event.key <= '4') {
-      const idx = Number(event.key) - 1;
+    if (key >= '1' && key <= '4') {
+      const idx = Number(key) - 1;
       answerQuestion(idx);
       highlightZone(idx);
       return;
     }
 
-    if (event.key.toLowerCase() === 'r') {
+    if (key.toLowerCase() === 'r') {
       readCurrentQuestion();
       return;
     }
 
-    if (event.key.toLowerCase() === 'x') {
+    if (key.toLowerCase() === 'x') {
       if (canSpeak) window.speechSynthesis.cancel();
       return;
     }
 
-    if (event.key === 'ArrowDown') {
+    if (key === 'ArrowDown') {
       if (!collides(currentPiece, 0, 1)) currentPiece.y += 1;
       return;
     }
 
     if (currentPiece.lockedSteer) return;
 
-    if (event.key === 'ArrowLeft' && !collides(currentPiece, -1, 0)) currentPiece.x -= 1;
-    if (event.key === 'ArrowRight' && !collides(currentPiece, 1, 0)) currentPiece.x += 1;
-    if (event.key === 'ArrowUp') {
+    if (key === 'ArrowLeft' && !collides(currentPiece, -1, 0)) currentPiece.x -= 1;
+    if (key === 'ArrowRight' && !collides(currentPiece, 1, 0)) currentPiece.x += 1;
+    if (key === 'ArrowUp') {
       const rot = rotate(currentPiece.shape);
       if (!collides(currentPiece, 0, 0, rot)) currentPiece.shape = rot;
     }
@@ -1041,7 +1061,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     if (canSpeak) window.speechSynthesis.cancel();
   });
 
-  document.addEventListener('keydown', handleKey);
+  window.addEventListener('keydown', handleKey, { capture: true });
 
   fillLists();
   loadPersisted();
