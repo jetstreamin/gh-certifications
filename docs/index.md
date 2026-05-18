@@ -31,6 +31,14 @@ Welcome to the GitHub Certifications learning repository. This resource document
   - MCP server integration
   - Best practices and troubleshooting
 
+- **[Copilot Memory: Repository Facts & User Preferences](./copilot-memory.md)** — Learn how Copilot stores repository-level facts and user preferences, improving effectiveness over time. Covers storage, validation, retention, and organizational best practices.
+  - Repository-level facts vs. user-level preferences
+  - Storage, validation, and auto-deletion (28-day rule)
+  - Privacy and security considerations
+  - Where Memory is used (Cloud Agent, Code Review, CLI)
+  - Enabling, managing, and curating facts
+  - Best practices for developers and organizations
+
 ### CodeQL & Code Security
 
 - **[Prepare a Database for CodeQL](./codeql/01-database-preparation.md)** — Learn how to install the CodeQL CLI, set up databases, and understand extractors for code analysis.
