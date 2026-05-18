@@ -8,6 +8,17 @@ description: Comprehensive learning hub for GitHub Certifications including GH-6
 
 The landing page is now organized by outcome: pass GH-600, build safe custom agents, and run CodeQL effectively.
 
+## Play Now: GH-600 Training Game
+
+<iframe
+  src="./gh-600-training-game.html"
+  title="GH-600 Training Game"
+  style="width: 100%; height: 1120px; border: 0; border-radius: 12px; background: transparent;"
+  loading="lazy"
+></iframe>
+
+If the embedded game does not load in your browser, open it directly: [GH-600 Training Game](./gh-600-training-game.html).
+
 ## Start Here
 
 1. **Preparing for GH-600?** Start with [GH-600 Exam Study Guide](./gh-600-exam-guide.md), then use [GH-600 Native Mock Exam](./gh-600-native-mock-exam.html).
