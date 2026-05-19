@@ -29,6 +29,28 @@ If the embedded game does not load in your browser, open it directly: [GH-600 Tr
 
 ## GH-600 Path
 
+- **[GH-600 Domain-Aligned Study Guide](./gh-600-domain-aligned-study.md)** ⭐ NEW - START HERE
+  - Organized by 6 official exam domains with weightings (15-20%, 20-25%, etc.)
+  - Maps modules to domains for focused study
+  - Memory, state, multi-agent coordination, error analysis deep dives
+  - Final preparation checklist
+
+- **[GH-600 Comprehensive Agentic AI Study Guide](./gh-600-agentic-ai-comprehensive-guide.md)** ⭐ NEW
+  - All three modules integrated: Foundations, Architecture, Tooling/MCP
+  - 120+ minutes of content
+  - Deep dives on Plan→Act→Evaluate, SDLC integration, governance, boundaries
+  - Glossary and exam strategy
+
+- **[GH-600 Practice Questions & Answers](./gh-600-practice-questions-answers.md)** ⭐ NEW
+  - 50+ scenario-based and multiple choice questions
+  - Complete answer explanations
+  - Grouped by module and difficulty
+
+- **[GH-600 Quick Reference Cheat Sheet](./gh-600-quick-reference.md)** ⭐ NEW
+  - 10-minute last-minute review
+  - Core concepts, patterns, anti-patterns
+  - Study tips and passing criteria
+
 - **[GH-600 Exam Study Guide](./gh-600-exam-guide.md)**
   - Full six-domain coverage
   - Practical exam strategy and patterns
@@ -87,14 +109,29 @@ If the embedded game does not load in your browser, open it directly: [GH-600 Tr
 
 ## Coverage Snapshot
 
-- GH-600: GitHub Agentic AI Developer - Complete (4 guides)
+- GH-600: GitHub Agentic AI Developer - Comprehensive (8 guides)
+  - Domain-aligned study guide (matches exam structure exactly)
+  - Foundations, Architecture, Tooling/MCP modules with deep dives
+  - 50+ practice questions with explanations
+  - Quick reference for exam day
 - GitHub Agent Development - Complete (8 guides)
 - GitHub Security and Code Scanning - In progress (2 guides)
 
 ---
 
+## Study Path Recommendation
+
+1. **First Pass:** Read [Domain-Aligned Guide](./gh-600-domain-aligned-study.md) - organized exactly how the exam is organized (120 min)
+2. **Deep Dive:** Then read [Comprehensive Guide](./gh-600-agentic-ai-comprehensive-guide.md) for deeper context (120 min)
+3. **Practice:** Work through [Practice Questions](./gh-600-practice-questions-answers.md) (90 min)
+4. **Exam Prep:** Review [Quick Reference](./gh-600-quick-reference.md) morning of exam (10 min)
+5. **Full Practice:** Take [Native Mock Exam](./gh-600-native-mock-exam.html) (90 min)
+6. **Game Mode:** Play [Training Game](./gh-600-training-game.html) for muscle memory (variable)
+
+---
+
 ## Repository Totals
 
-- Last updated: May 18, 2026
-- Total guides: 13
-- Total content: 45,000+ lines
+- Last updated: May 19, 2026
+- Total guides: 17
+- Total content: 95,000+ lines
