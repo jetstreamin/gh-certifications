@@ -1,0 +1,5 @@
+Taking GH-600 this Thursday. This is the exact prep stack I built — domain-aligned study guides, a native timed mock exam (60 Q, auto-scored), a Tetris training game, custom-agent guardrails, Copilot SDK patterns, and a full CodeQL workflow. All free on GitHub Pages.
+
+Comment GH600 and I'll share my exact study order. Posting my result after the exam.
+
+#GH600 #GitHubCopilot #AgenticAI #GitHubCertification #CodeQL #SoftwareEngineering #TechTok #StudyWithMe #LearnOnTikTok #DevTok
