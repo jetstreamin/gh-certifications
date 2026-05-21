@@ -14,6 +14,8 @@ The landing page is now organized by outcome: pass GH-600, build safe custom age
 
 [Open GH-600 Training Game (Refresh Link)](./gh-600-training-game.html?v=20260521)
 
+No embed frame is used here. The game opens as a full page.
+
 ---
 ## Start Here
 
