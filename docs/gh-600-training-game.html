@@ -5,19 +5,21 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
 ---
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Orbitron:wght@600;800&display=swap');
+
   :root {
     color-scheme: dark;
-    --bg: #121212;
-    --bg-2: #1e1e1e;
-    --panel: #1f1f1f;
-    --ink: #e0e0e0;
-    --muted: #a0a0a0;
-    --accent: #bb86fc;
-    --accent-2: #3700b3;
-    --good: #03dac6;
-    --bad: #cf6679;
+    --bg: #070b12;
+    --bg-2: #0d1320;
+    --panel: #111a27;
+    --ink: #eaf6ff;
+    --muted: #8ba4bb;
+    --accent: #38d4df;
+    --accent-2: #ff8a2b;
+    --good: #47f5ac;
+    --bad: #ff5f87;
     --border: rgba(255, 255, 255, 0.12);
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
   }
 
   [data-theme="dark"] {
@@ -37,18 +39,67 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
 
   body {
     margin: 0;
-    font-family: Aptos, "Segoe UI", sans-serif;
+    font-family: Rajdhani, "Segoe UI", sans-serif;
     color: var(--ink);
     background:
-      radial-gradient(circle at top left, rgba(15, 95, 106, 0.16), transparent 28%),
-      radial-gradient(circle at top right, rgba(199, 119, 26, 0.14), transparent 28%),
+      radial-gradient(circle at 20% -10%, rgba(56, 212, 223, 0.24), transparent 35%),
+      radial-gradient(circle at 80% -5%, rgba(255, 138, 43, 0.19), transparent 35%),
       linear-gradient(180deg, var(--bg), var(--bg-2));
+    min-height: 100vh;
+  }
+
+  .page-header {
+    display: none;
+  }
+
+  .main-content {
+    max-width: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .main-content > :first-child {
+    margin-top: 0;
   }
 
   .shell {
     max-width: 1320px;
     margin: 0 auto;
-    padding: 24px 18px 46px;
+    padding: 14px 18px 46px;
+    animation: reveal 0.8s ease-out;
+  }
+
+  .marquee {
+    margin-bottom: 14px;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .marquee h1 {
+    margin: 0;
+    font-family: Orbitron, Rajdhani, sans-serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .marquee .sub {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .mode-chip {
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(56, 212, 223, 0.4);
+    background: rgba(56, 212, 223, 0.12);
+    color: var(--accent);
+    font-family: Orbitron, Rajdhani, sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
   }
 
   .hero {
@@ -64,6 +115,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     border-radius: 20px;
     box-shadow: var(--shadow);
     backdrop-filter: blur(8px);
+    animation: floatIn 0.5s ease-out both;
   }
 
   .hero-main {
@@ -72,8 +124,9 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
 
   .hero-main h1 {
     margin: 0 0 10px;
+    font-family: Orbitron, Rajdhani, sans-serif;
     font-size: clamp(1.8rem, 4vw, 2.9rem);
-    letter-spacing: -0.03em;
+    letter-spacing: 0.01em;
   }
 
   .pill-row {
@@ -86,8 +139,8 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   .pill {
     padding: 8px 12px;
     border-radius: 999px;
-    background: rgba(15, 95, 106, 0.12);
-    border: 1px solid rgba(15, 95, 106, 0.18);
+    background: rgba(56, 212, 223, 0.12);
+    border: 1px solid rgba(56, 212, 223, 0.24);
     color: var(--accent);
     font-weight: 700;
     font-size: 0.85rem;
@@ -121,6 +174,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   .value {
     font-size: 1.34rem;
     font-weight: 800;
+    text-shadow: 0 0 14px rgba(56, 212, 223, 0.22);
   }
 
   .controls {
@@ -135,6 +189,12 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     padding: 10px 12px;
     font-weight: 800;
     cursor: pointer;
+    transition: transform 0.14s ease, filter 0.14s ease;
+  }
+
+  button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
   }
 
   .primary {
@@ -143,7 +203,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   }
 
   .secondary {
-    background: rgba(23, 35, 46, 0.08);
+    background: rgba(23, 35, 46, 0.26);
     color: var(--ink);
   }
 
@@ -154,7 +214,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
 
   .main {
     display: grid;
-    grid-template-columns: minmax(320px, 1fr) 360px minmax(320px, 1fr);
+    grid-template-columns: minmax(320px, 1fr) 392px minmax(320px, 1fr);
     gap: 14px;
     align-items: start;
   }
@@ -210,6 +270,17 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     padding: 10px;
     color: var(--muted);
     font-size: 0.9rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .feedback.flash-good {
+    border-color: rgba(71, 245, 172, 0.6);
+    box-shadow: 0 0 0 1px rgba(71, 245, 172, 0.22), 0 0 18px rgba(71, 245, 172, 0.18);
+  }
+
+  .feedback.flash-bad {
+    border-color: rgba(255, 95, 135, 0.58);
+    box-shadow: 0 0 0 1px rgba(255, 95, 135, 0.2), 0 0 18px rgba(255, 95, 135, 0.18);
   }
 
   .board-wrap {
@@ -218,19 +289,37 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     gap: 8px;
     justify-items: center;
     min-height: 760px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .board-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.03) 0,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+    pointer-events: none;
+    opacity: 0.22;
   }
 
   canvas {
     border-radius: 12px;
     border: 1px solid var(--border);
-    background: #0d1522;
-    width: 340px;
+    background: #071426;
+    box-shadow: 0 0 0 1px rgba(56, 212, 223, 0.22), 0 0 20px rgba(56, 212, 223, 0.12);
+    width: 370px;
     max-width: 100%;
     height: auto;
   }
 
   .zones {
-    width: 340px;
+    width: 370px;
     max-width: 100%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -298,6 +387,21 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     color: var(--muted);
   }
 
+  #status {
+    color: #bde6ff;
+    font-weight: 700;
+  }
+
+  @keyframes floatIn {
+    from { transform: translateY(8px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes reveal {
+    from { opacity: 0.4; }
+    to { opacity: 1; }
+  }
+
   @media (max-width: 1280px) {
     .main {
       grid-template-columns: 1fr 360px;
@@ -327,6 +431,14 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
 </style>
 
 <div class="shell">
+  <section class="panel marquee">
+    <div>
+      <h1>Drop Drill: Arcade Mode</h1>
+      <div class="sub">Answer fast. Steer clean. Keep the streak alive.</div>
+    </div>
+    <div class="mode-chip">Dark Arena</div>
+  </section>
+
   <section class="hero">
     <article class="panel hero-main">
       <h1>GH-600 Drop Drill</h1>
@@ -358,7 +470,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
         <button class="primary" id="startBtn">Start</button>
         <button class="secondary" id="pauseBtn">Pause</button>
         <button class="danger" id="restartBtn">Restart</button>
-        <button class="secondary" id="themeBtn">Theme: Light</button>
+        <button class="secondary" id="themeBtn">Theme: Dark</button>
         <button class="secondary" id="readToggleBtn">Auto Read: Off</button>
         <button class="secondary" id="soundToggleBtn">Sound: On</button>
       </div>
@@ -815,9 +927,17 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       score += bonus * level;
       level = 1 + Math.floor(lines / 8);
       feedback.textContent = `Line clear x${cleared}. +${bonus * level} points.`;
+      flashFeedback('good');
       playSfx('line');
       if (level > prevLevel) playSfx('level');
     }
+  }
+
+  function flashFeedback(kind) {
+    feedback.classList.remove('flash-good', 'flash-bad');
+    if (kind === 'good') feedback.classList.add('flash-good');
+    if (kind === 'bad') feedback.classList.add('flash-bad');
+    setTimeout(() => feedback.classList.remove('flash-good', 'flash-bad'), 220);
   }
 
   function updateHud() {
@@ -872,6 +992,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       streak += 1;
       score += 120 + streak * 12;
       feedback.innerHTML = `<strong style="color:var(--good);">Correct.</strong> Movement unlocked. ${currentPiece.question.why}`;
+      flashFeedback('good');
       playSfx('correct');
     } else {
       currentPiece.correct = false;
@@ -880,6 +1001,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       lives -= 1;
       score = Math.max(0, score - 60);
       feedback.innerHTML = `<strong style="color:var(--bad);">Wrong.</strong> Life lost. Correct answer: ${String.fromCharCode(65 + correctIdx)}. ${currentPiece.question.o[correctIdx]}`;
+      flashFeedback('bad');
       status.textContent = 'Wrong answer locked movement for this piece.';
       playSfx('wrong');
       if (lives <= 0) endGame();
@@ -909,6 +1031,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     });
 
     feedback.innerHTML = `<strong style="color:var(--bad);">No answer submitted.</strong> Life lost. Correct answer: ${String.fromCharCode(65 + correctIdx)}. ${currentPiece.question.o[correctIdx]}`;
+    flashFeedback('bad');
     status.textContent = 'No response before lock. Piece remained movement-locked.';
     playSfx('wrong');
 
@@ -958,10 +1081,12 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       if (landingLane === currentPiece.question.a) {
         score += 160;
         feedback.innerHTML = `<strong style="color:var(--good);">Perfect drop.</strong> Landed in zone ${String.fromCharCode(65 + landingLane)}.`;
+        flashFeedback('good');
         playSfx('correct');
       } else {
         score += 35;
         feedback.textContent = 'Correct answer, but not the matching zone. Smaller bonus applied.';
+        flashFeedback('bad');
         playSfx('land');
       }
     }
@@ -1173,7 +1298,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       }
     }
 
-    const theme = localStorage.getItem(THEME_KEY) || 'light';
+    const theme = 'dark';
     const soundPref = localStorage.getItem(SOUND_KEY);
     if (soundPref === 'off') setSoundEnabled(false);
     else setSoundEnabled(true);
@@ -1194,10 +1319,10 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   }
 
   function applyTheme(theme) {
-    const safe = theme === 'dark' ? 'dark' : 'light';
+    const safe = 'dark';
     document.documentElement.setAttribute('data-theme', safe);
     localStorage.setItem(THEME_KEY, safe);
-    themeBtn.textContent = safe === 'dark' ? 'Theme: Dark' : 'Theme: Light';
+    themeBtn.textContent = 'Theme: Dark';
   }
 
   function fillLists() {
@@ -1311,8 +1436,8 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   });
 
   themeBtn.addEventListener('click', () => {
-    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
+    applyTheme('dark');
+    status.textContent = 'Dark Arena mode is locked for this game.';
   });
 
   readToggleBtn.addEventListener('click', () => {
