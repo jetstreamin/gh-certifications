@@ -236,6 +236,38 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     margin: 8px 0 10px;
   }
 
+  .qa-section {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--panel) 86%, black 3%);
+  }
+
+  .section-label {
+    margin: 0 0 6px;
+    font-family: Orbitron, Rajdhani, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .scenario-text {
+    margin: 0;
+    color: var(--ink);
+    font-size: 0.96rem;
+    line-height: 1.5;
+  }
+
+  .question-text {
+    margin: 0;
+    color: var(--ink);
+    font-size: 1.04rem;
+    line-height: 1.45;
+    font-weight: 700;
+  }
+
   .answer-grid {
     display: grid;
     gap: 8px;
@@ -483,8 +515,19 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
       <article class="panel card">
         <h2 style="margin:0 0 8px;">Current Question</h2>
         <div class="tiny" id="questionMeta">Question 1</div>
-        <p class="question" id="questionText">Press Start to begin.</p>
-        <div class="answer-grid" id="answerGrid"></div>
+        <div class="qa-section">
+          <div class="section-label">Scenario</div>
+          <p class="scenario-text" id="scenarioText">Press Start to begin.</p>
+        </div>
+        <div class="qa-section">
+          <div class="section-label">Question</div>
+          <p class="question-text" id="questionText">Press Start to begin.</p>
+          <div class="tiny" id="questionPromptHint">Choose the best option.</div>
+        </div>
+        <div class="qa-section">
+          <div class="section-label">Answers</div>
+          <div class="answer-grid" id="answerGrid"></div>
+        </div>
         <div class="controls" style="margin-top:10px;">
           <button class="secondary" id="readNowBtn">Read Question</button>
           <button class="secondary" id="stopReadBtn">Stop Reading</button>
@@ -685,6 +728,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   const ctx = boardCanvas.getContext('2d');
   const zonesEl = document.getElementById('zones');
   const answerGrid = document.getElementById('answerGrid');
+  const scenarioText = document.getElementById('scenarioText');
   const questionText = document.getElementById('questionText');
   const questionMeta = document.getElementById('questionMeta');
   const feedback = document.getElementById('feedback');
@@ -710,6 +754,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   const ruleList = document.getElementById('ruleList');
   const featureList = document.getElementById('featureList');
   const controlList = document.getElementById('controlList');
+  const DEFAULT_SCENARIO = 'You are reviewing an agent workflow decision in a production-aware repository.';
 
   let board = createBoard();
   let currentPiece = null;
@@ -1205,8 +1250,10 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   }
 
   function renderQuestion(question) {
+    const scenario = question.scenario || DEFAULT_SCENARIO;
     questionMeta.textContent = `${question.skill} question ${question.index}/${question.total}`;
-    questionText.textContent = `Scenario: You are reviewing an agent workflow decision in a production-aware repository. ${question.q} Choose the best option.`;
+    scenarioText.textContent = scenario;
+    questionText.textContent = question.q;
 
     answerGrid.innerHTML = question.o.map((option, i) => {
       return `<button class="answer-btn" data-choice="${i}"><strong>${String.fromCharCode(65 + i)}.</strong> ${option}</button>`;
@@ -1321,8 +1368,9 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
 
   function readCurrentQuestion() {
     if (!canSpeak || !currentPiece) return;
+    const scenario = currentPiece.question.scenario || DEFAULT_SCENARIO;
     const answers = currentPiece.question.o.map((opt, i) => `${String.fromCharCode(65 + i)}. ${opt}`).join('. ');
-    const text = `${currentPiece.question.skill}. ${currentPiece.question.q}. Options: ${answers}`;
+    const text = `${currentPiece.question.skill}. Scenario: ${scenario}. Question: ${currentPiece.question.q}. Options: ${answers}`;
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.rate = 1;
