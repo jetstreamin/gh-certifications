@@ -10,7 +10,9 @@ The landing page is now organized by outcome: pass GH-600, build safe custom age
 
 ## Play Now: GH-600 Training Game
 
-[Play the GH-600 Training Game](./gh-600-training-game.html)
+[Open GH-600 Training Game (Direct Page)](./gh-600-training-game.html)
+
+[Open GH-600 Training Game (Refresh Link)](./gh-600-training-game.html?v=20260521)
 
 ---
 ## Start Here
