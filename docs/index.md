@@ -10,14 +10,9 @@ The landing page is now organized by outcome: pass GH-600, build safe custom age
 
 ## Play Now: GH-600 Training Game
 
-<iframe
-  src="./gh-600-training-game.html"
-  title="GH-600 Training Game"
-  style="width: 100%; height: 1400px; border: 0; border-radius: 12px; background: transparent;"
-  loading="lazy"
-></iframe>
+[Play the GH-600 Training Game](./gh-600-training-game.html)
 
-If the embedded game does not load in your browser, open it directly: [GH-600 Training Game](./gh-600-training-game.html).
+If the game does not load in your browser, click the link above to open it directly.
 
 ## Start Here
 
