@@ -1,0 +1,91 @@
+:root {
+  --page-bg: #0c1218;
+  --card-bg: #121b23;
+  --card-bg-2: #0f171e;
+  --text-main: #e7f0f7;
+  --text-muted: #9fb3c4;
+  --border: rgba(180, 209, 229, 0.18);
+  --accent-a: #19a7b3;
+  --accent-b: #e28f2d;
+}
+
+body {
+  color: var(--text-main);
+  background:
+    radial-gradient(1200px 400px at 10% -5%, rgba(25, 167, 179, 0.22), transparent 55%),
+    radial-gradient(900px 420px at 95% -10%, rgba(226, 143, 45, 0.18), transparent 50%),
+    linear-gradient(180deg, var(--page-bg), #0b1116 45%, #0a1015);
+}
+
+.page-header {
+  border-bottom: 1px solid var(--border);
+  background:
+    linear-gradient(110deg, #0f3247 0%, #176f7b 50%, #1e8462 100%);
+}
+
+.project-name,
+.project-tagline {
+  color: #f4fbff;
+}
+
+.main-content {
+  color: var(--text-main);
+}
+
+.main-content h1,
+.main-content h2,
+.main-content h3,
+.main-content h4,
+.main-content h5,
+.main-content h6 {
+  color: #d9edf9;
+}
+
+.main-content p,
+.main-content li {
+  color: var(--text-main);
+}
+
+.main-content a {
+  color: #55d4de;
+}
+
+.main-content a:hover {
+  color: #7be3eb;
+}
+
+.main-content pre,
+.main-content code {
+  background: #152029;
+  border-color: var(--border);
+  color: #d8ebf8;
+}
+
+.main-content hr {
+  background: linear-gradient(90deg, transparent, rgba(85, 212, 222, 0.5), transparent);
+  height: 1px;
+  border: 0;
+}
+
+.main-content table th,
+.main-content table td {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+}
+
+.btn {
+  color: #f6ffff;
+  background: rgba(13, 43, 59, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.btn:hover {
+  background: rgba(17, 71, 93, 0.58);
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+}
