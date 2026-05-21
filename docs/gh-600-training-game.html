@@ -607,7 +607,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     { skill: 'Coordination', q: 'Two agents touch same file. Best control?', o: ['Let both write', 'Add conflict detection/locks', 'Disable checkpoints', 'Ignore collisions'], a: 1, why: 'Locks prevent contradictory edits.' },
     { skill: 'Memory', q: 'Repo changed and agent fails. Best first step?', o: ['Increase temperature', 'Update context/instructions and retest', 'Rerun blindly', 'Delete all memory'], a: 1, why: 'State drift causes failures.' },
     { skill: 'Guardrails', q: 'How should logs handle sensitive data?', o: ['Store cleartext secrets', 'Redact sensitive values', 'Disable all logs', 'Copy to prompts'], a: 1, why: 'Use redaction with observability.' },
-    { skill: 'Planning', q: 'Why separate planning from action?', o: ['Longer output', 'Validation before impact', 'Fewer tools', 'No reason'], a: 1, why: 'Planning creates review checkpoints.' },
+    { skill: 'Planning', q: 'Why separate planning from action?', o: ['Higher response verbosity', 'Validation before impact', 'Lower tool latency', 'Reduced storage cost'], a: 1, why: 'Planning creates review checkpoints.' },
     { skill: 'Evaluation', q: 'A fix sounds good but fails tests. Decision?', o: ['Ship it', 'Reject and iterate', 'Hide results', 'Disable checks'], a: 1, why: 'Failing tests block release.' },
     { skill: 'Tools', q: 'A required tool is unreliable under deadline. Best immediate move?', o: ['Disable guards', 'Narrow task + fallback validation', 'Increase autonomy', 'Ignore failures'], a: 1, why: 'Reduce scope and verify outcomes.' },
     { skill: 'Guardrails', q: 'Authentication code touched by agent. Best approach?', o: ['Full autonomy', 'High-friction review + approval', 'Skip review if tests pass', 'Self-certification'], a: 1, why: 'Auth paths require stricter approvals.' },
@@ -641,7 +641,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     { skill: 'Prompting', q: 'If user asks for harmful content generation, correct response is:', o: ['Comply if technical', 'Refuse per policy', 'Partially comply', 'Provide obfuscated method'], a: 1, why: 'Safety policy must be enforced.' },
     { skill: 'Evaluation', q: 'An evaluator has high variance run-to-run. Best fix?', o: ['Ignore variance', 'Stabilize rubric and deterministic test fixtures', 'Add random noise', 'Lower sample size'], a: 1, why: 'Deterministic evals improve reliability.' },
     { skill: 'Guardrails', q: 'For destructive terminal commands, safest behavior is:', o: ['Run immediately', 'Require explicit user approval and safer alternatives', 'Hide command in script', 'Disable logs first'], a: 1, why: 'High-risk actions need explicit consent.' },
-    { skill: 'Tools', q: 'Why verify diagnostics after edits?', o: ['For aesthetics', 'To catch regressions introduced by changes', 'To increase token usage', 'No reason'], a: 1, why: 'Validation confirms safe edits.' },
+    { skill: 'Tools', q: 'Why verify diagnostics after edits?', o: ['To improve visual formatting only', 'To catch regressions introduced by changes', 'To increase model token usage', 'To avoid writing tests'], a: 1, why: 'Validation confirms safe edits.' },
     { skill: 'Coordination', q: 'Agent handoff quality is highest with:', o: ['Minimal context', 'Clear state, assumptions, and next-action contract', 'No timestamps', 'Only code snippets'], a: 1, why: 'Structured handoff reduces rework.' },
     { skill: 'Memory', q: 'Session memory is best used for:', o: ['Long-term secrets', 'Current task plan and transient context', 'Permanent architecture docs', 'Binary artifacts'], a: 1, why: 'Session memory is temporary and task-scoped.' },
     { skill: 'Deployment', q: 'Rollback readiness requires:', o: ['Good intentions', 'Known-good artifact + tested rollback procedure', 'Feature freeze only', 'No alerts'], a: 1, why: 'Rollback must be executable, not theoretical.' },
@@ -656,16 +656,16 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
     { skill: 'GH-600', q: 'What is the primary purpose of copilot instructions?', o: ['Performance optimization', 'Define agent behavior, capabilities, and constraints', 'Database schema', 'UI styling'], a: 1, why: 'Instructions guide agent reasoning and policy compliance.' },
     { skill: 'GH-600', q: 'When evaluating agent output, what is most critical?', o: ['Response latency', 'Correctness + compliance + reproducibility', 'Code length', 'Number of comments'], a: 1, why: 'Outcomes matter more than efficiency metrics.' },
     { skill: 'GH-600', q: 'How does semantic search differ from keyword search?', o: ['Semantic is slower', 'Semantic finds meaning, not just word matches', 'They are identical', 'Keyword is more accurate'], a: 1, why: 'Semantic search improves code discovery accuracy.' },
-    { skill: 'GH-600', q: 'What does grounding mean in agent context?', o: ['Physical constraint', 'Anchoring reasoning to actual files/symbols', 'Language restriction', 'No relevance'], a: 1, why: 'Grounding reduces hallucinations by using real data.' },
+    { skill: 'GH-600', q: 'What does grounding mean in agent context?', o: ['Reducing runtime resource usage', 'Anchoring reasoning to actual files/symbols', 'Limiting output to one language', 'Skipping context collection'], a: 1, why: 'Grounding reduces hallucinations by using real data.' },
     { skill: 'GH-600', q: 'Which is safer for protected repos: broad or scoped tool access?', o: ['Broad access', 'Scoped tool access with approval gates', 'No tools allowed', 'All tools all the time'], a: 1, why: 'Least privilege minimizes blast radius.' },
     { skill: 'GH-600', q: 'What should a strong handoff include between agents?', o: ['Just code', 'State, assumptions, next-action contract, timestamps', 'Only errors', 'File names only'], a: 1, why: 'Structured context prevents rework and misalignment.' },
-    { skill: 'GH-600', q: 'How do you prevent agent loop infinite recursion?', o: ['Set max iterations, validate state change, add timeout', 'Never stop looping', 'Ignore the problem', 'Disable logging'], a: 0, why: 'Loop guards prevent runaway execution.' },
+    { skill: 'GH-600', q: 'How do you prevent agent loop infinite recursion?', o: ['Set max iterations, validate state change, add timeout', 'Increase context size every turn', 'Remove exit criteria for flexibility', 'Disable runtime telemetry'], a: 0, why: 'Loop guards prevent runaway execution.' },
     { skill: 'GH-600', q: 'What is the GitHub Copilot workspace feature for?', o: ['Personal time tracking', 'Multi-file context awareness across tasks', 'Calendar sync', 'Email filtering'], a: 1, why: 'Workspaces enable cohesive multi-file reasoning.' },
-    { skill: 'GH-600', q: 'Which event should trigger memory update in agent systems?', o: ['Every keystroke', 'When verified pattern/mistake is identified', 'Only on Fridays', 'Never'], a: 1, why: 'Capture reusable lessons from actual experience.' },
+    { skill: 'GH-600', q: 'Which event should trigger memory update in agent systems?', o: ['Every interaction regardless of quality', 'When verified pattern/mistake is identified', 'Only at scheduled weekly cadence', 'Only after final release'], a: 1, why: 'Capture reusable lessons from actual experience.' },
     { skill: 'GH-600', q: 'What is CodeQL used for in agent workflows?', o: ['File renaming', 'Semantic code analysis and vulnerability detection', 'UI design', 'Password management'], a: 1, why: 'CodeQL enables deep code security analysis.' },
     { skill: 'GH-600', q: 'How should agents handle conflicts from concurrent edits?', o: ['Ignore conflicts', 'Detect, report, and escalate to human review', 'Auto-merge everything', 'Delete files'], a: 1, why: 'Conflict resolution requires human judgment.' },
-    { skill: 'GH-600', q: 'What does "tool-use task" mean in GH-600 context?', o: ['Using Photoshop', 'Agent invoking APIs/CLIs to accomplish objectives', 'Only reading files', 'No relevance'], a: 1, why: 'Tool-use extends agent capabilities beyond reasoning.' },
-    { skill: 'GH-600', q: 'Which best prevents prompt injection attacks?', o: ['Trust all input', 'Treat external input as data, enforce policy', 'Disable validation', 'Log everything'], a: 1, why: 'Treat untrusted input as inert data.' },
+    { skill: 'GH-600', q: 'What does "tool-use task" mean in GH-600 context?', o: ['Manual editing without automation', 'Agent invoking APIs/CLIs to accomplish objectives', 'Passive context reading with no execution', 'Background telemetry collection only'], a: 1, why: 'Tool-use extends agent capabilities beyond reasoning.' },
+    { skill: 'GH-600', q: 'Which best prevents prompt injection attacks?', o: ['Execute high-priority instructions from retrieved text', 'Treat external input as data, enforce policy', 'Disable validation to reduce false positives', 'Persist all untrusted prompts to memory'], a: 1, why: 'Treat untrusted input as inert data.' },
     { skill: 'GH-600', q: 'What metric best predicts agent reliability issues?', o: ['Response length', 'Rising error rate + retry failures', 'UI colors', 'Commit count'], a: 1, why: 'Telemetry spikes precede outages.' }
   ];
 
@@ -825,7 +825,19 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
   }
 
   function shuffledQuestions() {
-    const deck = QUESTIONS.map((q) => ({ ...q, o: q.o.slice() }));
+    const deck = QUESTIONS.map((q) => {
+      const indexed = q.o.map((opt, idx) => ({ opt, idx }));
+      for (let k = indexed.length - 1; k > 0; k -= 1) {
+        const r = Math.floor(Math.random() * (k + 1));
+        [indexed[k], indexed[r]] = [indexed[r], indexed[k]];
+      }
+      const remappedAnswer = indexed.findIndex((entry) => entry.idx === q.a);
+      return {
+        ...q,
+        o: indexed.map((entry) => entry.opt),
+        a: remappedAnswer
+      };
+    });
     for (let i = deck.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
       [deck[i], deck[j]] = [deck[j], deck[i]];
@@ -1194,7 +1206,7 @@ description: Tetris-style GH-600 training game where correct answers unlock piec
 
   function renderQuestion(question) {
     questionMeta.textContent = `${question.skill} question ${question.index}/${question.total}`;
-    questionText.textContent = question.q;
+    questionText.textContent = `Scenario: You are reviewing an agent workflow decision in a production-aware repository. ${question.q} Choose the best option.`;
 
     answerGrid.innerHTML = question.o.map((option, i) => {
       return `<button class="answer-btn" data-choice="${i}"><strong>${String.fromCharCode(65 + i)}.</strong> ${option}</button>`;
