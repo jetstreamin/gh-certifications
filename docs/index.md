@@ -12,8 +12,7 @@ The landing page is now organized by outcome: pass GH-600, build safe custom age
 
 [Play the GH-600 Training Game](./gh-600-training-game.html)
 
-If the game does not load in your browser, click the link above to open it directly.
-
+---
 ## Start Here
 
 1. **Preparing for GH-600?** Start with [GH-600 Exam Study Guide](./gh-600-exam-guide.md), then use [GH-600 Native Mock Exam](./gh-600-native-mock-exam.html).
